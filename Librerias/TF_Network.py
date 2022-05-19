@@ -1,0 +1,104 @@
+import tensorflow.keras.regularizers
+from tensorflow.keras.layers import Dense, Bidirectional, LSTM, Input, Conv1D
+from tensorflow.keras import Model
+
+
+class TF_LSTM:
+    def __init__(self, input_shape=(18, 3), output_shape=1, hidden_units=128, hidden_units_2=128, hidden_units_3=128,
+                 layers=1, dropout=0.0, lr=0.01, recurrent_dropout=0.0):
+        self.input_shape = input_shape
+        self.output_shape = output_shape
+        self.hidden_units = hidden_units
+        self.hidden_units_2 = hidden_units_2
+        self.hidden_units_3 = hidden_units_3
+        self.layers = layers
+        self.lr = lr
+        self.dropout = dropout
+        self.recurrent_dropout = recurrent_dropout
+
+    def __repr__(self):
+        return 'tseq_6_q_5_neurons_{}_neurons2_{}_neurons3_{}_lr_{}'.format(self.hidden_units, self.hidden_units_2,
+                                                                            self.hidden_units_3, self.lr)
+
+    def build(self):
+        i = Input(shape=self.input_shape)
+
+        x = LSTM(self.hidden_units, dropout=self.dropout, recurrent_dropout=self.recurrent_dropout,
+                 return_sequences=self.layers > 1, kernel_regularizer=tensorflow.keras.regularizers.L2(0.001))(i)
+        if self.layers > 1:
+            for _ in range(self.layers - 2):
+                x = LSTM(self.hidden_units_2, dropout=self.dropout, recurrent_dropout=self.recurrent_dropout,
+                         return_sequences=True, kernel_regularizer=tensorflow.keras.regularizers.L2(0.001))(x)
+            x = LSTM(self.hidden_units_3, dropout=self.dropout, recurrent_dropout=self.recurrent_dropout,
+                     return_sequences=False, kernel_regularizer=tensorflow.keras.regularizers.L2(0.001))(x)
+
+        x = Dense(self.output_shape, activation=None)(x)
+
+        return Model(inputs=[i], outputs=[x])
+
+
+class BI_LSTM:
+    def __init__(self, input_shape=(18, 3), output_shape=1, hidden_units=128, hidden_units_2=128, hidden_units_3=128,
+                 layers=1, dropout=0.0, lr=0.01, recurrent_dropout=0.0):
+        self.input_shape = input_shape
+        self.output_shape = output_shape
+        self.hidden_units = hidden_units
+        self.hidden_units_2 = hidden_units_2
+        self.hidden_units_3 = hidden_units_3
+        self.layers = layers
+        self.lr = lr
+        self.dropout = dropout
+        self.recurrent_dropout = recurrent_dropout
+
+    def __repr__(self):
+        return 'tseq_6_q_5_neurons_128_neurons2_0_neurons3_0_lr_0.01'
+
+    def build(self):
+        i = Input(shape=self.input_shape)
+
+        x = Bidirectional(LSTM(self.hidden_units, dropout=self.dropout, recurrent_dropout=self.recurrent_dropout,
+                               return_sequences=self.layers > 1, kernel_regularizer=tensorflow.keras.regularizers.L2(0.001)))(i)
+        if self.layers > 1:
+            for _ in range(self.layers - 2):
+                x = LSTM(self.hidden_units_2, dropout=self.dropout, recurrent_dropout=self.recurrent_dropout,
+                         return_sequences=True, kernel_regularizer=tensorflow.keras.regularizers.L2(0.001))(x)
+            x = LSTM(self.hidden_units_3, dropout=self.dropout, recurrent_dropout=self.recurrent_dropout,
+                     return_sequences=False, kernel_regularizer=tensorflow.keras.regularizers.L2(0.001))(x)
+
+        x = Dense(self.output_shape, activation=None)(x)
+
+        return Model(inputs=[i], outputs=[x])
+
+
+class CNN_1D:
+    def __init__(self, input_shape=(18, 3), output_shape=1, hidden_units=128, hidden_units_2=128, hidden_units_3=128,
+                 layers=1, dropout=0.0, lr=0.01, recurrent_dropout=0.0):
+        self.input_shape = input_shape
+        self.output_shape = output_shape
+        self.hidden_units = hidden_units
+        self.hidden_units_2 = hidden_units_2
+        self.hidden_units_3 = hidden_units_3
+        self.layers = layers
+        self.lr = lr
+        self.dropout = dropout
+        self.recurrent_dropout = recurrent_dropout
+
+    def __repr__(self):
+        return 'tseq_6_q_5_neurons_{}_neurons2_{}_neurons3_{}_lr_{}'.format(self.hidden_units, self.hidden_units_2,
+                                                                            self.hidden_units_3, self.lr)
+
+    def build(self):
+        i = Input(shape=self.input_shape)
+
+        x = Conv1D(self.hidden_units, dropout=self.dropout, recurrent_dropout=self.recurrent_dropout,
+                   kernel_regularizer=tensorflow.keras.regularizers.L2(0.001))(i)
+        if self.layers > 1:
+            for _ in range(self.layers - 2):
+                x = LSTM(self.hidden_units_2, dropout=self.dropout, recurrent_dropout=self.recurrent_dropout,
+                         return_sequences=True, kernel_regularizer=tensorflow.keras.regularizers.L2(0.001))(x)
+            x = LSTM(self.hidden_units_3, dropout=self.dropout, recurrent_dropout=self.recurrent_dropout,
+                     return_sequences=False, kernel_regularizer=tensorflow.keras.regularizers.L2(0.001))(x)
+
+        x = Dense(self.output_shape, activation=None)(x)
+
+        return Model(inputs=[i], outputs=[x])
