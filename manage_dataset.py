@@ -18,25 +18,25 @@ def create_dataset(train_samples, eval_samples, test_samples, data_path):
         ins_path = data_path + 'Insulina/Insulina_ADM_288_dia_{}.txt'.format(i)
         ing_path = data_path + 'Ingesta/Glucosa_ING_288_dia_{}.txt'.format(i)
         hr_data = data_path + 'ritmo-cardiaco/Ritmo_cardiaco_dia_{}.txt'.format(i)
-        steps_data = data_path + 'Pasos/Pasos_dia_{}.txt'.format(i)
+        #steps_data = data_path + 'Pasos/Pasos_dia_{}.txt'.format(i)
 
         glu_data = pd.read_csv(glu_path, delim_whitespace=True, names=glu_columns, dtype=np.float64)
         ins_data = pd.read_csv(ins_path, delim_whitespace=True, names=ins_columns, dtype=np.float64)
         ing_data = pd.read_csv(ing_path, delim_whitespace=True, names=ing_columns, dtype=np.float64)
         hr_data = pd.read_csv(hr_data, delim_whitespace=True, names=hr_columns, dtype=np.float64)
-        steps_data = pd.read_csv(steps_data, delim_whitespace=True, names=steps_columns, dtype=np.float64)
+        #steps_data = pd.read_csv(steps_data, delim_whitespace=True, names=steps_columns, dtype=np.float64)
 
         glu_data = glu_data.to_numpy()
         ins_data = ins_data.to_numpy()
         ing_data = ing_data.to_numpy()
         hr_data = hr_data.to_numpy()
-        steps_data = steps_data.to_numpy()
+        #steps_data = steps_data.to_numpy()
 
         train_dataset[index, :, 0] = glu_data[:, 1]
         train_dataset[index, :, 1] = ins_data[:, 0]
         train_dataset[index, :, 2] = ing_data[:, 0]
         train_dataset[index, :, 3] = hr_data[:, 0]
-        train_dataset[index, :, 4] = steps_data[:, 0]
+        #train_dataset[index, :, 4] = steps_data[:, 0]
 
         index += 1
 
@@ -46,25 +46,25 @@ def create_dataset(train_samples, eval_samples, test_samples, data_path):
         ins_path = data_path + 'Insulina/Insulina_ADM_288_dia_{}.txt'.format(i)
         ing_path = data_path + 'Ingesta/Glucosa_ING_288_dia_{}.txt'.format(i)
         hr_path = data_path + 'ritmo-cardiaco/Ritmo_cardiaco_dia_{}.txt'.format(i)
-        steps_path = data_path + 'Pasos/Pasos_dia_{}.txt'.format(i)
+        #steps_path = data_path + 'Pasos/Pasos_dia_{}.txt'.format(i)
 
         glu_data = pd.read_csv(glu_path, delim_whitespace=True, names=glu_columns, dtype=np.float64)
         ins_data = pd.read_csv(ins_path, delim_whitespace=True, names=ins_columns, dtype=np.float64)
         ing_data = pd.read_csv(ing_path, delim_whitespace=True, names=ing_columns, dtype=np.float64)
         hr_data = pd.read_csv(hr_path, delim_whitespace=True, names=hr_columns, dtype=np.float64)
-        steps_data = pd.read_csv(steps_path, delim_whitespace=True, names=steps_columns, dtype=np.float64)
+        #steps_data = pd.read_csv(steps_path, delim_whitespace=True, names=steps_columns, dtype=np.float64)
 
         glu_data = glu_data.to_numpy()
         ins_data = ins_data.to_numpy()
         ing_data = ing_data.to_numpy()
         hr_data = hr_data.to_numpy()
-        steps_data = steps_data.to_numpy()
+        #steps_data = steps_data.to_numpy()
 
         eval_dataset[index, :, 0] = glu_data[:, 1]
         eval_dataset[index, :, 1] = ins_data[:, 0]
         eval_dataset[index, :, 2] = ing_data[:, 0]
         eval_dataset[index, :, 3] = hr_data[:, 0]
-        eval_dataset[index, :, 4] = steps_data[:, 0]
+        #eval_dataset[index, :, 4] = steps_data[:, 0]
 
         index += 1
 
@@ -74,25 +74,25 @@ def create_dataset(train_samples, eval_samples, test_samples, data_path):
         ins_path = data_path + 'Insulina/Insulina_ADM_288_dia_{}.txt'.format(i)
         ing_path = data_path + 'Ingesta/Glucosa_ING_288_dia_{}.txt'.format(i)
         hr_path = data_path + 'ritmo-cardiaco/Ritmo_cardiaco_dia_{}.txt'.format(i)
-        steps_path = data_path + 'Pasos/Pasos_dia_{}.txt'.format(i)
+        #steps_path = data_path + 'Pasos/Pasos_dia_{}.txt'.format(i)
 
         glu_data = pd.read_csv(glu_path, delim_whitespace=True, names=glu_columns, dtype=np.float64)
         ins_data = pd.read_csv(ins_path, delim_whitespace=True, names=ins_columns, dtype=np.float64)
         ing_data = pd.read_csv(ing_path, delim_whitespace=True, names=ing_columns, dtype=np.float64)
         hr_data = pd.read_csv(hr_path, delim_whitespace=True, names=hr_columns, dtype=np.float64)
-        steps_data = pd.read_csv(steps_path, delim_whitespace=True, names=steps_columns, dtype=np.float64)
+        #steps_data = pd.read_csv(steps_path, delim_whitespace=True, names=steps_columns, dtype=np.float64)
 
         glu_data = glu_data.to_numpy()
         ins_data = ins_data.to_numpy()
         ing_data = ing_data.to_numpy()
         hr_data = hr_data.to_numpy()
-        steps_data = steps_data.to_numpy()
+        #steps_data = steps_data.to_numpy()
 
         test_dataset[index, :, 0] = glu_data[:, 1]
         test_dataset[index, :, 1] = ins_data[:, 0]
         test_dataset[index, :, 2] = ing_data[:, 0]
         test_dataset[index, :, 3] = hr_data[:, 0]
-        test_dataset[index, :, 4] = steps_data[:, 0]
+        #test_dataset[index, :, 4] = steps_data[:, 0]
 
         index += 1
 
