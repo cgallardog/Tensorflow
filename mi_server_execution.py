@@ -10,6 +10,7 @@ import Librerias.dataset_pacientes_y_ficheros_nuevo as dataset_samples
 import Librerias.ConfiguracionOptimizacionParametrosForServer as param_conf
 import Librerias.DataTransformation as dt
 import Librerias.TF_Network as tf_model
+from utils import RMSE
 import manage_dataset
 
 
@@ -17,15 +18,16 @@ def train_and_save(trainX, trainY, model, t_seq, q, hidden_neurons_1=0, hidden_n
                    lr=0.01, n_layers=1, extrapolated=1):
     if extrapolated == 1:
         if n_layers == 1:
-            model_file = 'tseq_{}_q_{}_neurons_{}_lr_{}_INS_ING'.format(t_seq, q, hidden_neurons_1, lr)
+            model_file = 'tseq_{}_q_{}_neurons_{}_l{}_lr_{}_INS_ING'.format(t_seq, q, hidden_neurons_1, n_layers, lr)
         elif n_layers == 2:
-            model_file = 'tseq_{}_q_{}_neurons_{}_last_neurons_{}_lr_{}'.format(t_seq, q, hidden_neurons_1,
-                                                                                last_hidden_neuron, lr)
+            model_file = 'tseq_{}_q_{}_neurons_{}_last_neurons_{}_l{}_lr_{}'.format(t_seq, q, hidden_neurons_1,
+                                                                                    last_hidden_neuron, n_layers, lr)
         else:
-            model_file = 'tseq_{}_q_{}_neurons_{}_middle_neurons_{}_last_neurons_{}_lr_{}'.format(t_seq, q,
-                                                                                                  hidden_neurons_1,
-                                                                                                  hidden_neurons_2,
-                                                                                                  last_hidden_neuron, lr)
+            model_file = 'tseq_{}_q_{}_neurons_{}_middle_neurons_{}_last_neurons_{}_l{}_lr_{}'.format(t_seq, q,
+                                                                                                      hidden_neurons_1,
+                                                                                                      hidden_neurons_2,
+                                                                                                      last_hidden_neuron,
+                                                                                                      n_layers, lr)
     elif extrapolated == 2:
         if n_layers == 1:
             model_file = 'unf_tseq_{}_q_{}_neurons_{}_lr_{}_INS_ING'.format(t_seq, q, hidden_neurons_1, lr)
@@ -54,10 +56,12 @@ def train_and_save(trainX, trainY, model, t_seq, q, hidden_neurons_1=0, hidden_n
     checkpoint_path = model_path + model_file + '.tf'
 
     model_checkpoint = tf.keras.callbacks.ModelCheckpoint(checkpoint_path, save_best_only=True, save_weights_only=True)
-    stop_fit_early = tf.keras.callbacks.EarlyStopping(patience=30)
+    tensorboard_checkpoint = tf.keras.callbacks.TensorBoard('logs/scalars/{}'.format(model_file), update_freq=1)
+    stop_fit_early = tf.keras.callbacks.EarlyStopping(patience=10)
 
-    history = model.fit(trainX, trainY, validation_split=0.1, shuffle=True, epochs=300,
+    history = model.fit(trainX, trainY, validation_split=0.25, shuffle=True, epochs=2,
                         batch_size=32, verbose=1, use_multiprocessing=True, workers=5, callbacks=[model_checkpoint,
+                                                                                                  tensorboard_checkpoint,
                                                                                                   stop_fit_early])
 
     if not os.path.exists(model_path):
@@ -144,7 +148,7 @@ def prepare_extrapolated_dataset(t_seq, q, H, dataset):
     return np.array(dataX2), np.array(dataY2)
 
 
-def save_configuration(t_seq, H, q, n_layers, n_neuronas, n_neuronas_2, n_neuronas_last, lr, model_path, configuration):
+def save_configuration(t_seq, H, q, n_layers, n_neuronas, n_neuronas_2, n_neuronas_last, lr, model_path, configuration, scaler):
     data_config = {
         't_seq': t_seq,
         'H': H,
@@ -155,7 +159,10 @@ def save_configuration(t_seq, H, q, n_layers, n_neuronas, n_neuronas_2, n_neuron
         'n_neuronas_last': n_neuronas_last,
         'optimizer_alg': 1,
         'name_optimizer': 'Adam',
-        'LR': lr
+        'LR': lr,
+        'mean': scaler.mean_,
+        'scale': scaler.scale_,
+        'var': scaler.var_,
     }
     configuration.loc[0] = data_config
     configuration.to_csv(model_path + '/configuracion.txt', header=True, index=False, sep='\t')
@@ -192,10 +199,10 @@ H = 1
 
 # normalizamos los datos de train y validation
 # train_dataset, eval_dataset = dt.data_normalize(train_dataset, eval_dataset)
-train_dataset, eval_dataset = dt.data_standarization(train_dataset, eval_dataset)
+train_dataset, eval_dataset, scaler = dt.data_standarization(train_dataset, eval_dataset)
 
 configuration = pd.DataFrame(columns=['t_seq', 'H', 'q', 'n_layers', 'n_neuronas', 'n_neuronas_2', 'n_neuronas_last',
-                                      'optimizer_alg', 'name_optimizer', 'LR'])
+                                      'optimizer_alg', 'name_optimizer', 'LR', 'mean', 'scale', 'var'])
 for t_seq in all_t_seq:
     for q in all_q:
         trainX, trainY = manage_dataset.prepare_dataset(t_seq, q, H, train_dataset)
@@ -241,7 +248,7 @@ for t_seq in all_t_seq:
                                           layers=n_layers)
             model = LSTM_model.build()
             # neurons1, neurons2, neurons3, neurons4, lr, n_layers = model.get_parameters()
-            model.compile(loss=tf.keras.losses.mean_squared_error,
+            model.compile(loss=RMSE,
                           optimizer=tf.keras.optimizers.Adam(learning_rate=lr),
                           metrics=[tf.keras.metrics.RootMeanSquaredError(),
                                    tf.keras.metrics.MeanAbsoluteError()])
@@ -251,4 +258,4 @@ for t_seq in all_t_seq:
                                     hidden_neurons_2=hidden_units_2, last_hidden_neuron=hidden_units_3, lr=lr,
                                     n_layers=n_layers, extrapolated=extrapolate)
         save_configuration(t_seq, H, q, n_layers, hidden_units, hidden_units_2, hidden_units_3, lr, model_path,
-                           configuration)
+                           configuration, scaler)

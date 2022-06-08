@@ -43,7 +43,7 @@ def data_standarization(train_dataset, eval_dataset):
     for i in range(len(eval_dataset)):
         eval_dataset[i, :, :] = scaler.transform(eval_dataset[i, :, :])
 
-    return train_dataset, eval_dataset
+    return train_dataset, eval_dataset, scaler
 
 def data_test_standarization_2(train_dataset, eval_dataset, test_dataset):
     scaler = StandardScaler()

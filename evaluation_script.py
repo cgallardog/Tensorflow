@@ -181,16 +181,16 @@ for i in range(len(all_models)):
     testX = np.reshape(testX, (testX.shape[0] * testX.shape[1], t_seq, testX.shape[3]))
     testY = np.reshape(testY, (testY.shape[0] * testY.shape[1], H))
 
-    '''model = tf_model.TF_LSTM(input_shape=(testX.shape[1], testX.shape[2]), hidden_units=hidden_neurons_1,
+    model = tf_model.TF_LSTM(input_shape=(testX.shape[1], testX.shape[2]), hidden_units=hidden_neurons_1,
                              hidden_units_2=hidden_neurons_2, hidden_units_3=last_hidden_neuron,
                              layers=n_layers, lr=lr)
     model = model.build()
     model.compile(loss=tf.losses.mean_squared_error,
                   optimizer='adam',
                   metrics=tf.metrics.RootMeanSquaredError())
-    model.load_weights(model_path)'''
+    model.load_weights(model_path)
 
-    model = tf.keras.models.load_model('OptimizacionParametros/tseq_12_q_5_neurons_128_neurons2_0_neurons3_0_lr_0.01/2tseq_12_q_5_neurons_128_neurons2_0_neurons3_0_lr_0.01.tf')
+    #model = tf.keras.models.load_model('OptimizacionParametros/tseq_12_q_5_neurons_128_neurons2_0_neurons3_0_lr_0.01/2tseq_12_q_5_neurons_128_neurons2_0_neurons3_0_lr_0.01.tf')
     model.summary()
     # model = tf_model.TF_LSTM()
     # neurons1, neurons2, neurons3, neurons4, lr, n_layers = model.get_parameters()
