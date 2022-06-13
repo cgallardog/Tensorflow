@@ -185,7 +185,7 @@ for i in range(len(all_models)):
                              hidden_units_2=hidden_neurons_2, hidden_units_3=last_hidden_neuron,
                              layers=n_layers, lr=lr)
     model = model.build()
-    model.compile(loss=tf.losses.mean_squared_error,
+    model.compile(loss=RMSE,
                   optimizer='adam',
                   metrics=tf.metrics.RootMeanSquaredError())
     model.load_weights(model_path)

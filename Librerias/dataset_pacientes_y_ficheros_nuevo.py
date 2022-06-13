@@ -84,6 +84,13 @@ def get_dataset():
     test_data = P2 + P4 + P6 + P8 + P10 + P12  # dataset of testing (to prevent overfitting)
     all_dataset = train_data + eval_data + test_data'''
 
+    '''train_data = P1  # dataset of training (impares)
+    #   train_data = P1  # dataset of training
+    eval_data = P1  # dataset of evaluation (pares, excepto P2 que dejo para test)
+    #   eval_data = P2  # dataset of evaluation
+    test_data = P2  # dataset of testing (to prevent overfitting)
+    all_dataset = train_data + eval_data + test_data'''
+
     return all_dataset, train_data, eval_data, test_data
 
 
