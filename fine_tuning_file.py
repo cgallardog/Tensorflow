@@ -53,19 +53,19 @@ def model_builder(hp):
 
     # hp_units = hp.HParam('num_units', hp.Discrete([8, 16, 32, 64, 128, 256])
     model = tf.keras.Sequential()
-    for layer in range(hp.Int('n_layers', min_layers, max_layers)):
-        hp_units = hp.Int('units', min_value=min_neuron1, max_value=max_neuron1, step=step1)
-        model.add(tf.keras.layers.LSTM(units=hp_units, input_shape=(trainX.shape[1], trainX.shape[2]),
-                                       return_sequences=True))  # LSTM espera [samples, timesteps, features]
-        if layer + 1 > 1:
-            for _ in range(layer - 2):
-                hp_dropout = hp.Choice('dropout', values=dropout)
-                hp_recurrent_dropout = hp.Choice('recurrent_dropout', values=recurrent_dropout)
-                hp_units_2 = hp.Int('units2', min_value=min_neuron2, max_value=max_neuron2, step=step2)
-                model.add(tf.keras.layers.LSTM(units=hp_units_2, return_sequences=True, dropout=hp_dropout,
-                                               recurrent_dropout=hp_recurrent_dropout))
-            hp_units_3 = hp.Int('units3', min_value=min_neuron3, max_value=max_neuron3, step=step3)
-            model.add(tf.keras.layers.LSTM(units=hp_units_3))
+    layer = hp.Int('n_layers', min_value=min_layers, max_value=max_layers, step=1)
+    hp_units = hp.Int('units', min_value=min_neuron1, max_value=max_neuron1, step=step1)
+    model.add(tf.keras.layers.LSTM(units=hp_units, input_shape=(trainX.shape[1], trainX.shape[2]),
+                                   return_sequences=layer > 1))  # LSTM espera [samples, timesteps, features]
+    if layer + 1 > 1:
+        for _ in range(layer - 2):
+            hp_dropout = hp.Choice('dropout', values=dropout)
+            hp_recurrent_dropout = hp.Choice('recurrent_dropout', values=recurrent_dropout)
+            hp_units_2 = hp.Int('units2', min_value=min_neuron2, max_value=max_neuron2, step=step2)
+            model.add(tf.keras.layers.LSTM(units=hp_units_2, return_sequences=True, dropout=hp_dropout,
+                                           recurrent_dropout=hp_recurrent_dropout))
+        hp_units_3 = hp.Int('units3', min_value=min_neuron3, max_value=max_neuron3, step=step3)
+        model.add(tf.keras.layers.LSTM(units=hp_units_3, return_sequences=False))
     model.add(tf.keras.layers.Dense(1))
 
     # hp_learning_rate = hp.Choice('learning_rate', values=[1e-2, 1e-3, 1e-4])
@@ -146,14 +146,8 @@ def save_configuration(t_seq, H, q, n_layers, n_neuronas, n_neuronas_2, n_neuron
 # print("Is GPU available? {}".format(USE_CUDA))
 gpus = tf.config.experimental.list_physical_devices(device_type='GPU')
 tf.config.experimental.set_memory_growth(device=gpus[0], enable=True)
-extrapolate, manual_mode = decide_extrapolation()
 
-if extrapolate == 1:
-    data_path = "Dataset/zTodos/"
-elif extrapolate == 2:
-    data_path = "Dataset/Evaluation/"
-else:
-    data_path = "Dataset/Todos/"
+data_path = "Dataset/zTodos/"
 
 if not os.path.exists('OptimizacionParametros'):
     os.mkdir('OptimizacionParametros')
@@ -215,6 +209,6 @@ for t_seq in all_t_seq:
         # lo entrenamos y testeamos
         model_path = train_and_save(trainX, trainY, model, t_seq, q, hidden_neurons_1=hidden_units,
                                     hidden_neurons_2=hidden_units_2, last_hidden_neuron=hidden_units_3, lr=lr,
-                                    n_layers=n_layers, extrapolated=extrapolate)
+                                    n_layers=n_layers)
         save_configuration(t_seq, H, q, n_layers, hidden_units, hidden_units_2, hidden_units_3, lr, model_path,
                            configuration, scaler)

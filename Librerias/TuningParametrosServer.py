@@ -4,9 +4,9 @@ class CombinacionParametrosRedOptimizar():
         self.combinaciones_t_seq = [12]  # Input dimension a la red
         self.combinaciones_q = [5]  # Prediction horizon is H+q
         self.combinaciones_n_layers = [3, 5]
-        self.neurons_layer_1 = [32, 128, 32]
-        self.neurons_layer_2 = [0, 0, 0]
-        self.neurons_layer_3 = [32, 128, 32]
+        self.neurons_layer_1 = [128, 1024, 128]
+        self.neurons_layer_2 = [128, 1024, 128]
+        self.neurons_layer_3 = [128, 1024, 128]
         self.fixed_neurons_1 = 1024
         self.fixed_neurons_2 = 512
         self.fixed_neurons_3 = 256
