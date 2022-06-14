@@ -189,7 +189,7 @@ for t_seq in all_t_seq:
                               project_name='kt_hyperparameters')
         stop_early = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=10)
         turner.search(trainX, trainY, validation_split=0.25, shuffle=True, epochs=100, use_multiprocessing=True,
-                      workers=10, callbacks=[stop_early, tf.keras.callbacks.TensorBoard('tune', update_freq=1)])
+                      workers=10, callbacks=[stop_early, tf.keras.callbacks.TensorBoard('tune_2', update_freq=1)])
         best_hps = turner.get_best_hyperparameters(num_trials=1)[0]
         model = turner.hypermodel.build(best_hps)
         _, max_layers = parameters.get_combinaciones_n_layers()
