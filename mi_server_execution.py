@@ -93,7 +93,7 @@ H = 1
 train_dataset, eval_dataset, scaler = dt.data_standarization(train_dataset, eval_dataset)
 
 configuration = pd.DataFrame(columns=['t_seq', 'H', 'q', 'n_layers', 'n_neuronas', 'n_neuronas_2', 'n_neuronas_last',
-                                      'optimizer_alg', 'name_optimizer', 'LR', 'mean', 'scale', 'var'])
+                                      'optimizer_alg', 'name_optimizer', 'LR'])
 for t_seq in all_t_seq:
     for q in all_q:
         trainX, trainY = manage_dataset.prepare_dataset(t_seq, q, H, train_dataset)
