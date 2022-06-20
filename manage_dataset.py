@@ -3,9 +3,9 @@ import pandas as pd
 
 
 def create_dataset(train_samples, eval_samples, test_samples, data_path):
-    train_dataset = np.empty(shape=(len(train_samples), 288, 3))
-    eval_dataset = np.empty(shape=(len(eval_samples), 288, 3))
-    test_dataset = np.empty(shape=(len(test_samples), 288, 3))
+    train_dataset = np.empty(shape=(len(train_samples), 288, 4))
+    eval_dataset = np.empty(shape=(len(eval_samples), 288, 4))
+    test_dataset = np.empty(shape=(len(test_samples), 288, 4))
 
     glu_columns = ['finger', 'glucose']
     ins_columns = ['mg/dl']
