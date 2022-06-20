@@ -54,17 +54,20 @@ def model_builder(hp):
     # hp_units = hp.HParam('num_units', hp.Discrete([8, 16, 32, 64, 128, 256])
     model = tf.keras.Sequential()
     layer = hp.Int('n_layers', min_value=min_layers, max_value=max_layers, step=1)
-    hp_units = hp.Int('units', min_value=min_neuron1, max_value=max_neuron1, step=step1)
+    '''hp_units = hp.Int('units', min_value=min_neuron1, max_value=max_neuron1, step=step1)'''
+    hp_units = hp.Choice('units', values=step1)
     model.add(tf.keras.layers.LSTM(units=hp_units, input_shape=(trainX.shape[1], trainX.shape[2]),
                                    return_sequences=layer > 1))  # LSTM espera [samples, timesteps, features]
     if layer + 1 > 1:
         for _ in range(layer - 2):
             hp_dropout = hp.Choice('dropout', values=dropout)
             hp_recurrent_dropout = hp.Choice('recurrent_dropout', values=recurrent_dropout)
-            hp_units_2 = hp.Int('units2', min_value=min_neuron2, max_value=max_neuron2, step=step2)
+            '''hp_units_2 = hp.Int('units2', min_value=min_neuron2, max_value=max_neuron2, step=step2)'''
+            hp_units_2 = hp.Choice('units2', values=step2)
             model.add(tf.keras.layers.LSTM(units=hp_units_2, return_sequences=True, dropout=hp_dropout,
                                            recurrent_dropout=hp_recurrent_dropout))
-        hp_units_3 = hp.Int('units3', min_value=min_neuron3, max_value=max_neuron3, step=step3)
+        '''hp_units_3 = hp.Int('units3', min_value=min_neuron3, max_value=max_neuron3, step=step3)'''
+        hp_units_3 = hp.Choice('units3', values=step3)
         model.add(tf.keras.layers.LSTM(units=hp_units_3, return_sequences=False))
     model.add(tf.keras.layers.Dense(1))
 
@@ -185,8 +188,9 @@ for t_seq in all_t_seq:
         valY = np.reshape(valY, (valY.shape[0] * valY.shape[1], H))
 
         # creamos el modelo
-        turner = kt.Hyperband(model_builder, objective='val_loss', max_epochs=50, factor=3, directory='my_dir_2',
-                              project_name='kt_hyperparameters_2')
+        '''turner = kt.Hyperband(model_builder, objective='val_loss', max_epochs=50, factor=3, directory='my_dir_2',
+                              project_name='kt_hyperparameters_2')'''
+        turner = kt.BayesianOptimization(model_builder, objective='val_loss')
         stop_early = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=10)
         turner.search(trainX, trainY, validation_split=0.25, shuffle=True, epochs=100, use_multiprocessing=True,
                       workers=10, callbacks=[stop_early, tf.keras.callbacks.TensorBoard('tune_2', update_freq=1)])
