@@ -8,14 +8,14 @@ class CombinacionParametrosRedOptimizar():
         self.neurons_layer_2 = [0, 0, 0]
         self.neurons_layer_3 = [32, 128, 32]
         self.fixed_neurons_1 = 128
-        self.fixed_neurons_2 = 64
-        self.fixed_neurons_3 = 32
+        self.fixed_neurons_2 = 256
+        self.fixed_neurons_3 = 128
         # self.combinaciones_optimizer_alg = [1, 2, 3]    # optimizer_alg == 1: 'Adam', optimizer_alg == 2: 'SGD', optimizer_alg == 3: 'RMSprop'
         self.combinaciones_optimizer_alg = [1]  # optimizer_alg == 1: 'Adam', optimizer_alg == 2: 'SGD', optimizer_alg == 3: 'RMSprop'
         self.combinaciones_name_optimizer = ['Adam', 'SGD', 'RMSprop']
         self.combinaciones_lr = [0.01, 0.001]  # learning rate
         self.fixed_lr = 0.001
-        self.dropout = 0.0
+        self.dropout = 0.5
         self.recurrent_dropout = 0.0
 
     def get_combinaciones_tseq(self):

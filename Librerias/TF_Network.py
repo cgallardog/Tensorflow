@@ -29,7 +29,7 @@ class TF_LSTM:
             for _ in range(self.layers - 2):
                 x = LSTM(self.hidden_units_2, dropout=self.dropout, recurrent_dropout=self.recurrent_dropout,
                          return_sequences=True, kernel_regularizer=tensorflow.keras.regularizers.L2(0.001))(x)
-            x = LSTM(self.hidden_units_3, dropout=self.dropout, recurrent_dropout=self.recurrent_dropout,
+            x = LSTM(self.hidden_units_3, recurrent_dropout=self.recurrent_dropout,
                      return_sequences=False, kernel_regularizer=tensorflow.keras.regularizers.L2(0.001))(x)
 
         x = Dense(self.output_shape, activation=None)(x)
