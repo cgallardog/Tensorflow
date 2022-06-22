@@ -47,7 +47,7 @@ def model_builder(hp):
     '''min_neuron2, max_neuron2, step2 = parameters.get_neuronas_2()
     min_neuron3, max_neuron3, step3 = parameters.get_neuronas_3()'''
     min_neuron2, step2, step3 = parameters.get_fixed_neurons()
-    min_layers, max_layers = parameters.get_combinaciones_n_layers()
+    min_layers, max_layers = parameters.get_fixed_n_layers()
     lr = parameters.get_combinaciones_lr()
     dropout, recurrent_dropout = parameters.get_dropout()
 
