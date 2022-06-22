@@ -5,7 +5,7 @@ class CombinacionParametrosRedOptimizar():
         self.combinaciones_q = [5]  # Prediction horizon is H+q
         self.combinaciones_n_layers = [0, 1]
         self.neurons_layer_1 = [32, 64, 128]
-        self.neurons_layer_2 = [8]
+        self.neurons_layer_2 = [8, 16, 32]
         self.neurons_layer_3 = [8, 16, 32]
         self.fixed_neurons_1 = 1024
         self.fixed_neurons_2 = 0
