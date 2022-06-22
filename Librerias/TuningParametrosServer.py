@@ -8,8 +8,8 @@ class CombinacionParametrosRedOptimizar():
         self.neurons_layer_2 = [8]
         self.neurons_layer_3 = [8]
         self.fixed_neurons_1 = 1024
-        self.fixed_neurons_2 = 512
-        self.fixed_neurons_3 = 256
+        self.fixed_neurons_2 = 0
+        self.fixed_neurons_3 = 0
         # self.combinaciones_optimizer_alg = [1, 2, 3]    # optimizer_alg == 1: 'Adam', optimizer_alg == 2: 'SGD', optimizer_alg == 3: 'RMSprop'
         self.combinaciones_optimizer_alg = [1]  # optimizer_alg == 1: 'Adam', optimizer_alg == 2: 'SGD', optimizer_alg == 3: 'RMSprop'
         self.combinaciones_name_optimizer = ['Adam']
@@ -29,6 +29,9 @@ class CombinacionParametrosRedOptimizar():
 
     def get_combinaciones_n_layers(self):
         return self.combinaciones_n_layers[0], self.combinaciones_n_layers[1]
+
+    def get_fixed_n_layers(self):
+        return self.combinaciones_n_layers
 
     def get_combinaciones_optimizer_alg(self):
         return self.combinaciones_optimizer_alg
