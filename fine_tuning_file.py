@@ -197,7 +197,8 @@ for t_seq in all_t_seq:
                       workers=10, callbacks=[stop_early, tf.keras.callbacks.TensorBoard('tune_4', update_freq=1)])
         best_hps = turner.get_best_hyperparameters(num_trials=1)[0]
         model = turner.hypermodel.build(best_hps)
-        _, max_layers = parameters.get_combinaciones_n_layers()
+        '''_, max_layers = parameters.get_combinaciones_n_layers()'''
+        max_layers = parameters.get_fixed_n_layers()
         hidden_units = best_hps['units']
         if max_layers < 3:
             hidden_units_2 = 0
