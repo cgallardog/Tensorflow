@@ -62,7 +62,7 @@ def model_builder(hp):
     elif max_layers > 1:
         hp_units_2 = hp.Choice('units2', values=step2)
     model.add(tf.keras.layers.LSTM(units=hp_units, input_shape=(trainX.shape[1], trainX.shape[2]),
-                                   return_sequences=layer > 1))  # LSTM espera [samples, timesteps, features]
+                                   return_sequences=layer > 0))  # LSTM espera [samples, timesteps, features]
     if layer + 1 > 1:
         if layer + 1 > 2:
             for _ in range(layer - 2):
