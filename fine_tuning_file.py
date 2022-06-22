@@ -189,9 +189,9 @@ for t_seq in all_t_seq:
         valY = np.reshape(valY, (valY.shape[0] * valY.shape[1], H))
 
         # creamos el modelo
-        '''turner = kt.Hyperband(model_builder, objective='val_loss', max_epochs=50, factor=3, directory='my_dir_2',
-                              project_name='kt_hyperparameters_2')'''
-        turner = kt.BayesianOptimization(model_builder, objective='val_loss')
+        turner = kt.Hyperband(model_builder, objective='val_loss', max_epochs=50, factor=1, directory='my_dir_3',
+                              project_name='kt_hyperparameters_3')
+        '''turner = kt.BayesianOptimization(model_builder, objective='val_loss')'''
         stop_early = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=5)
         turner.search(trainX, trainY, validation_split=0.25, shuffle=True, epochs=100, use_multiprocessing=True,
                       workers=10, callbacks=[stop_early, tf.keras.callbacks.TensorBoard('tune_4', update_freq=1)])

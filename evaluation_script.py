@@ -115,7 +115,7 @@ data_path = "Dataset/zTodos/"
 if not os.path.exists('OptimizacionParametros'):
     os.mkdir('OptimizacionParametros')
 
-modo_extrapolacion = decide_extrapolation()
+modo_extrapolacion = 1
 
 # recogemos todas las muestras, ya divididas
 all_samples, training_samples, eval_samples, test_samples = dataset_samples.get_dataset()
