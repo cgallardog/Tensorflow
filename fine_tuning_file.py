@@ -47,14 +47,14 @@ def model_builder(hp):
     '''min_neuron2, max_neuron2, step2 = parameters.get_neuronas_2()
     min_neuron3, max_neuron3, step3 = parameters.get_neuronas_3()'''
     min_neuron2, step2, step3 = parameters.get_fixed_neurons()
-    min_layers, max_layers = parameters.get_fixed_n_layers()
+    min_layers = parameters.get_fixed_n_layers()
     lr = parameters.get_combinaciones_lr()
     dropout, recurrent_dropout = parameters.get_dropout()
 
 
     # hp_units = hp.HParam('num_units', hp.Discrete([8, 16, 32, 64, 128, 256])
     model = tf.keras.Sequential()
-    layer = hp.Int('n_layers', min_value=min_layers, max_value=max_layers, step=1)
+    layer = 0
     '''hp_units = hp.Int('units', min_value=min_neuron1, max_value=max_neuron1, step=step1)'''
     hp_units = hp.Choice('units', values=step1)
     model.add(tf.keras.layers.LSTM(units=hp_units, input_shape=(trainX.shape[1], trainX.shape[2]),
