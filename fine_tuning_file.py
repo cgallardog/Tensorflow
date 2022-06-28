@@ -194,10 +194,10 @@ for t_seq in all_t_seq:
         # creamos el modelo
         '''turner = kt.Hyperband(model_builder, objective='val_loss', max_epochs=50, factor=2, directory='my_dir_3',
                               project_name='kt_hyperparameters_3')'''
-        turner = kt.BayesianOptimization(model_builder, objective='loss', max_trials=15)
-        stop_early = tf.keras.callbacks.EarlyStopping(monitor='loss', patience=5)
+        turner = kt.BayesianOptimization(model_builder, objective='val_loss', max_trials=15, directory='val_loss_bayesian')
+        stop_early = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=5)
         turner.search(trainX, trainY, validation_split=0.25, shuffle=True, epochs=50, use_multiprocessing=True,
-                      workers=10, callbacks=[stop_early, tf.keras.callbacks.TensorBoard('tune_loss', update_freq=1)])
+                      workers=10, callbacks=[stop_early, tf.keras.callbacks.TensorBoard('tune_val_loss', update_freq=1)])
         best_hps = turner.get_best_hyperparameters(num_trials=1)[0]
         model = turner.hypermodel.build(best_hps)
         '''_, max_layers = parameters.get_combinaciones_n_layers()'''
