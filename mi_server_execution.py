@@ -22,7 +22,7 @@ def train_and_save(trainX, trainY, model, t_seq, q, hidden_neurons_1=0, hidden_n
         model_file = 'tseq_{}_q_{}_neurons_{}_last_neurons_{}_l{}_lr_{}'.format(t_seq, q, hidden_neurons_1,
                                                                                 last_hidden_neuron, n_layers, lr)
     else:
-        model_file = 'bi_{}_q_{}_feat_{}_neurons_{}_middle_neurons_{}_last_neurons_{}_l{}_lr_{}'.format(t_seq, q,
+        model_file = 'bilstm_{}_q_{}_feat_{}_neurons_{}_middle_neurons_{}_last_neurons_{}_l{}_lr_{}'.format(t_seq, q,
                                                                                                   trainX.shape[-1],
                                                                                                   hidden_neurons_1,
                                                                                                   hidden_neurons_2,
