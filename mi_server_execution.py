@@ -22,7 +22,7 @@ def train_and_save(trainX, trainY, model, t_seq, q, hidden_neurons_1=0, hidden_n
         model_file = 'tseq_{}_q_{}_neurons_{}_last_neurons_{}_l{}_lr_{}'.format(t_seq, q, hidden_neurons_1,
                                                                                 last_hidden_neuron, n_layers, lr)
     else:
-        model_file = 'bilstm_{}_q_{}_feat_{}_neurons_{}_middle_neurons_{}_last_neurons_{}_l{}_lr_{}'.format(t_seq, q,
+        model_file = 'tseq_{}_q_{}_feat_{}_neurons_{}_middle_neurons_{}_last_neurons_{}_l{}_lr_{}'.format(t_seq, q,
                                                                                                   trainX.shape[-1],
                                                                                                   hidden_neurons_1,
                                                                                                   hidden_neurons_2,
@@ -112,7 +112,7 @@ for t_seq in all_t_seq:
         hidden_units, hidden_units_2, hidden_units_3 = parameters.get_fixed_neurons()
         lr = parameters.get_fixed_lr()
         dropout, recurrent_dropout = parameters.get_dropout()
-        LSTM_model = tf_model.BI_LSTM(input_shape=(trainX.shape[1], trainX.shape[2]), hidden_units=hidden_units,
+        LSTM_model = tf_model.TF_LSTM(input_shape=(trainX.shape[1], trainX.shape[2]), hidden_units=hidden_units,
                                       hidden_units_2=hidden_units_2, hidden_units_3=hidden_units_3,
                                       layers=n_layers, dropout=dropout, recurrent_dropout=recurrent_dropout)
         model = LSTM_model.build()
