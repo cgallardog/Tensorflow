@@ -14,7 +14,7 @@ class CombinacionParametrosRedOptimizar():
         self.combinaciones_optimizer_alg = [1]  # optimizer_alg == 1: 'Adam', optimizer_alg == 2: 'SGD', optimizer_alg == 3: 'RMSprop'
         self.combinaciones_name_optimizer = ['Adam', 'SGD', 'RMSprop']
         self.combinaciones_lr = [0.01, 0.001]  # learning rate
-        self.fixed_lr = 0.001
+        self.fixed_lr = 0.01
         self.dropout = 0.0
         self.recurrent_dropout = 0.0
 
