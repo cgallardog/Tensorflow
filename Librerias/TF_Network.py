@@ -21,7 +21,7 @@ class TF_LSTM:
                                                                             self.hidden_units_3, self.lr)
 
     def build(self):
-        '''i = Input(shape=self.input_shape)
+        i = Input(shape=self.input_shape)
 
         x = LSTM(self.hidden_units, dropout=self.dropout, recurrent_dropout=self.recurrent_dropout,
                  return_sequences=self.layers > 0, kernel_regularizer=tensorflow.keras.regularizers.L2(0.001))(i)
@@ -32,9 +32,9 @@ class TF_LSTM:
             x = LSTM(self.hidden_units_3, dropout=self.dropout, recurrent_dropout=self.recurrent_dropout,
                      return_sequences=False, kernel_regularizer=tensorflow.keras.regularizers.L2(0.001))(x)
 
-        x = Dense(self.output_shape, activation=None)(x)'''
+        x = Dense(self.output_shape, activation=None)(x)
 
-        i = Input(shape=self.input_shape)
+        '''i = Input(shape=self.input_shape)
 
         x = LSTM(self.hidden_units, dropout=self.dropout, recurrent_dropout=self.recurrent_dropout,
                  return_sequences=True)(i)
@@ -46,7 +46,7 @@ class TF_LSTM:
                  return_sequences=True)(x)
         x = LSTM(self.hidden_units_3, dropout=self.dropout, recurrent_dropout=self.recurrent_dropout,
                  return_sequences=False)(x)
-        x = Dense(self.output_shape, activation=None)(x)
+        x = Dense(self.output_shape, activation=None)(x)'''
 
         return Model(inputs=[i], outputs=[x])
 

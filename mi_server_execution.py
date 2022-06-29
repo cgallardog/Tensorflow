@@ -112,7 +112,7 @@ for t_seq in all_t_seq:
         hidden_units, hidden_units_2, hidden_units_3 = parameters.get_fixed_neurons()
         lr = parameters.get_fixed_lr()
         dropout, recurrent_dropout = parameters.get_dropout()
-        LSTM_model = tf_model.TF_LSTM(input_shape=(trainX.shape[1], trainX.shape[2]), hidden_units=hidden_units,
+        LSTM_model = tf_model.BI_LSTM(input_shape=(trainX.shape[1], trainX.shape[2]), hidden_units=hidden_units,
                                       hidden_units_2=hidden_units_2, hidden_units_3=hidden_units_3,
                                       layers=n_layers, dropout=dropout, recurrent_dropout=recurrent_dropout)
         model = LSTM_model.build()
