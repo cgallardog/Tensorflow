@@ -70,10 +70,10 @@ def model_builder(hp):
         if layer + 1 > 2:
             for _ in range(layer - 2):
                 '''hp_units_2 = hp.Int('units2', min_value=min_neuron2, max_value=max_neuron2, step=step2)'''
-                model.add(tf.keras.layers.LSTM(units=hp_units/2, return_sequences=True, dropout=hp_dropout,
+                model.add(tf.keras.layers.LSTM(units=int(hp_units/2), return_sequences=True, dropout=hp_dropout,
                                                recurrent_dropout=hp_recurrent_dropout))
         '''hp_units_3 = hp.Int('units3', min_value=min_neuron3, max_value=max_neuron3, step=step3)'''
-        model.add(tf.keras.layers.LSTM(units=hp_units/4, return_sequences=False))
+        model.add(tf.keras.layers.LSTM(units=int(hp_units/4), return_sequences=False))
     model.add(tf.keras.layers.Dense(1))
 
     # hp_learning_rate = hp.Choice('learning_rate', values=[1e-2, 1e-3, 1e-4])
