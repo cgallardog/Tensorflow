@@ -13,9 +13,9 @@ class CombinacionParametrosRedOptimizar():
         # self.combinaciones_optimizer_alg = [1, 2, 3]    # optimizer_alg == 1: 'Adam', optimizer_alg == 2: 'SGD', optimizer_alg == 3: 'RMSprop'
         self.combinaciones_optimizer_alg = [1]  # optimizer_alg == 1: 'Adam', optimizer_alg == 2: 'SGD', optimizer_alg == 3: 'RMSprop'
         self.combinaciones_name_optimizer = ['Adam']
-        self.combinaciones_lr = [0.001, 0.01]  # learning rate
+        self.combinaciones_lr = [0.001, 0.01, 0.005]  # learning rate
         self.fixed_lr = 0.001
-        self.dropout = [0.0]
+        self.dropout = [0.0, 0.2, 0.5]
         self.recurrent_dropout = [0.0]
 
     def get_combinaciones_tseq(self):

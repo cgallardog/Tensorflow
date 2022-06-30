@@ -44,35 +44,36 @@ def train_and_save(trainX, trainY, model, t_seq, q, hidden_neurons_1=0, hidden_n
 
 def model_builder(hp):
     min_neuron1, max_neuron1, step1 = parameters.get_neuronas_1()
-    min_neuron2, max_neuron2, step2 = parameters.get_neuronas_2()
-    min_neuron3, max_neuron3, step3 = parameters.get_neuronas_3()
+    '''min_neuron2, max_neuron2, step2 = parameters.get_neuronas_2()
+    min_neuron3, max_neuron3, step3 = parameters.get_neuronas_3()'''
     '''min_neuron2, step2, step3 = parameters.get_fixed_neurons()'''
     min_layers, max_layers = parameters.get_combinaciones_n_layers()
     lr = parameters.get_combinaciones_lr()
     dropout, recurrent_dropout = parameters.get_dropout()
 
-
-    # hp_units = hp.HParam('num_units', hp.Discrete([8, 16, 32, 64, 128, 256])
-    model = tf.keras.Sequential()
     layer = hp.Int('n_layers', min_value=min_layers, max_value=max_layers, step=1)
     '''hp_units = hp.Int('units', min_value=min_neuron1, max_value=max_neuron1, step=step1)'''
     hp_units = hp.Choice('units', values=step1)
-    if max_layers > 0:
+    '''if max_layers > 0:
         hp_units_3 = hp.Choice('units3', values=step3)
     if max_layers > 1:
-        hp_units_2 = hp.Choice('units2', values=step2)
-    model.add(tf.keras.layers.LSTM(units=hp_units, input_shape=(trainX.shape[1], trainX.shape[2]),
-                                   return_sequences=layer > 0))  # LSTM espera [samples, timesteps, features]
+        hp_units_2 = hp.Choice('units2', values=step2)'''
+    hp_dropout = hp.Choice('dropout', values=dropout)
+    hp_recurrent_dropout = hp.Choice('recurrent_dropout', values=recurrent_dropout)
+
+
+    # hp_units = hp.HParam('num_units', hp.Discrete([8, 16, 32, 64, 128, 256])
+    model = tf.keras.Sequential()
+    model.add(tf.keras.layers.LSTM(units=hp_units, input_shape=(trainX.shape[1], trainX.shape[2]), dropout=hp_dropout,
+                                   recurrent_dropout=hp_recurrent_dropout, return_sequences=layer > 0))  # LSTM espera [samples, timesteps, features]
     if layer + 1 > 1:
         if layer + 1 > 2:
             for _ in range(layer - 2):
-                hp_dropout = hp.Choice('dropout', values=dropout)
-                hp_recurrent_dropout = hp.Choice('recurrent_dropout', values=recurrent_dropout)
                 '''hp_units_2 = hp.Int('units2', min_value=min_neuron2, max_value=max_neuron2, step=step2)'''
-                model.add(tf.keras.layers.LSTM(units=hp_units_2, return_sequences=True, dropout=hp_dropout,
+                model.add(tf.keras.layers.LSTM(units=hp_units/2, return_sequences=True, dropout=hp_dropout,
                                                recurrent_dropout=hp_recurrent_dropout))
         '''hp_units_3 = hp.Int('units3', min_value=min_neuron3, max_value=max_neuron3, step=step3)'''
-        model.add(tf.keras.layers.LSTM(units=hp_units_3, return_sequences=False))
+        model.add(tf.keras.layers.LSTM(units=hp_units/4, return_sequences=False))
     model.add(tf.keras.layers.Dense(1))
 
     # hp_learning_rate = hp.Choice('learning_rate', values=[1e-2, 1e-3, 1e-4])
