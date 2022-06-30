@@ -198,7 +198,7 @@ for t_seq in all_t_seq:
         turner = kt.BayesianOptimization(model_builder, objective='val_loss', max_trials=15, directory='reducing_bayesian')
         stop_early = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=5)
         turner.search(trainX, trainY, validation_split=0.25, shuffle=True, epochs=50, use_multiprocessing=True,
-                      workers=10, callbacks=[stop_early, tf.keras.callbacks.TensorBoard('tune_val_loss', update_freq=1)])
+                      workers=10, callbacks=[stop_early, tf.keras.callbacks.TensorBoard('reducing_loss', update_freq=1)])
         best_hps = turner.get_best_hyperparameters(num_trials=1)[0]
         model = turner.hypermodel.build(best_hps)
         '''_, max_layers = parameters.get_combinaciones_n_layers()'''
