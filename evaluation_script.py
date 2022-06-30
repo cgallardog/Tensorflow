@@ -181,7 +181,7 @@ for i in range(len(all_models)):
     testX = np.reshape(testX, (testX.shape[0] * testX.shape[1], t_seq, testX.shape[3]))
     testY = np.reshape(testY, (testY.shape[0] * testY.shape[1], H))
 
-    model = tf_model.BI_LSTM(input_shape=(testX.shape[1], testX.shape[2]), hidden_units=hidden_neurons_1,
+    model = tf_model.TF_LSTM(input_shape=(testX.shape[1], testX.shape[2]), hidden_units=hidden_neurons_1,
                              hidden_units_2=hidden_neurons_2, hidden_units_3=last_hidden_neuron,
                              layers=n_layers, lr=lr)
     model = model.build()

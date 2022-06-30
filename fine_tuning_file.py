@@ -204,7 +204,7 @@ for t_seq in all_t_seq:
         '''_, max_layers = parameters.get_combinaciones_n_layers()'''
         _, max_layers = parameters.get_combinaciones_n_layers()
         hidden_units = best_hps['units']
-        if max_layers < 3:
+        '''if max_layers < 3:
             hidden_units_2 = 0
             if max_layers < 2:
                 hidden_units_3 = 0
@@ -212,13 +212,13 @@ for t_seq in all_t_seq:
                 hidden_units_3 = best_hps['units3']
         else:
             hidden_units_2 = best_hps['units2']
-            hidden_units_3 = best_hps['units3']
+            hidden_units_3 = best_hps['units3']'''
         lr = best_hps['learning_rate']
         n_layers = best_hps['n_layers']
 
         # lo entrenamos y testeamos
         model_path = train_and_save(trainX, trainY, model, t_seq, q, hidden_neurons_1=hidden_units,
-                                    hidden_neurons_2=hidden_units_2, last_hidden_neuron=hidden_units_3, lr=lr,
+                                    hidden_neurons_2=hidden_units/2, last_hidden_neuron=hidden_units/4, lr=lr,
                                     n_layers=n_layers)
-        save_configuration(t_seq, H, q, n_layers, hidden_units, hidden_units_2, hidden_units_3, lr, model_path,
+        save_configuration(t_seq, H, q, n_layers, hidden_units, hidden_units/2, hidden_units/4, lr, model_path,
                            configuration, scaler)
