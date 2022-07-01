@@ -81,7 +81,6 @@ all_samples, training_samples, eval_samples, test_samples = dataset_samples.get_
 # cargamos y dividimos los dataset, juntando todos los datos en un mismo array
 train_dataset, eval_dataset, test_dataset = manage_dataset.create_dataset(training_samples, eval_samples, test_samples,
                                                                           data_path)
-
 # cargamos todas las variables necesarias
 parameters = param_conf.CombinacionParametrosRedOptimizar()
 all_t_seq = parameters.get_combinaciones_tseq()  # numero de puntos previos que usaremos
