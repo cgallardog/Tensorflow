@@ -3,7 +3,7 @@ class CombinacionParametrosRedOptimizar():
     def __init__(self):
         self.combinaciones_t_seq = [12]  # Input dimension a la red
         self.combinaciones_q = [5]  # Prediction horizon is H+q
-        self.combinaciones_n_layers = 4
+        self.combinaciones_n_layers = 5
         self.neurons_layer_1 = [32, 128, 32]
         self.neurons_layer_2 = [0, 0, 0]
         self.neurons_layer_3 = [32, 128, 32]
@@ -16,7 +16,7 @@ class CombinacionParametrosRedOptimizar():
         self.combinaciones_lr = [0.01, 0.001]  # learning rate
         self.fixed_lr = 0.001
         self.dropout = 0.0
-        self.recurrent_dropout = 0.0
+        self.recurrent_dropout = 0.5
 
     def get_combinaciones_tseq(self):
         return self.combinaciones_t_seq
