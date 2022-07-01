@@ -34,7 +34,7 @@ def evaluate_results(testX, testY, model, mean, stdev):
     mse = mean_squared_error(y, y_hat, squared=True)
     mae = mean_absolute_error(y, y_hat)
 
-    print('RMSR:{}, MAE:{}'.format(rmse, mae))
+    print('RMSE:{}, MAE:{}'.format(rmse, mae))
 
     return rmse, mse, mae, pearson_correlation, y_hat, y
 
