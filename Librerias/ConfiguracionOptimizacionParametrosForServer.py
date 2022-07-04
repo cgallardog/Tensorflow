@@ -16,7 +16,7 @@ class CombinacionParametrosRedOptimizar():
         self.combinaciones_lr = [0.01, 0.001]  # learning rate
         self.fixed_lr = 0.001
         self.dropout = 0.0
-        self.recurrent_dropout = 0.5
+        self.recurrent_dropout = 0.0
 
     def get_combinaciones_tseq(self):
         return self.combinaciones_t_seq
