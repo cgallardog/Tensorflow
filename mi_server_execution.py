@@ -87,8 +87,8 @@ all_q = parameters.get_combinaciones_q()  # horizonte de predicción (que valor 
 H = 1
 
 # normalizamos los datos de train y validation
-# train_dataset, eval_dataset = dt.data_normalize(train_dataset, eval_dataset)
-train_dataset, eval_dataset, scaler = dt.data_standarization(train_dataset, eval_dataset)
+train_dataset, eval_dataset = dt.data_normalize(train_dataset, eval_dataset)
+# train_dataset, eval_dataset, scaler = dt.data_standarization(train_dataset, eval_dataset)
 
 configuration = pd.DataFrame(columns=['t_seq', 'H', 'q', 'n_layers', 'n_neuronas', 'n_neuronas_2', 'n_neuronas_last',
                                       'optimizer_alg', 'name_optimizer', 'LR'])
