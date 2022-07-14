@@ -87,8 +87,8 @@ all_q = parameters.get_combinaciones_q()  # horizonte de predicción (que valor 
 H = 1
 
 # normalizamos los datos de train y validation
-train_dataset, eval_dataset = dt.data_normalize(train_dataset, eval_dataset)
-# train_dataset, eval_dataset, scaler = dt.data_standarization(train_dataset, eval_dataset)
+# train_dataset, eval_dataset = dt.data_normalize(train_dataset, eval_dataset)
+train_dataset, eval_dataset, scaler = dt.data_standarization(train_dataset, eval_dataset)
 
 configuration = pd.DataFrame(columns=['t_seq', 'H', 'q', 'n_layers', 'n_neuronas', 'n_neuronas_2', 'n_neuronas_last',
                                       'optimizer_alg', 'name_optimizer', 'LR'])
@@ -124,5 +124,7 @@ for t_seq in all_t_seq:
         model_path = train_and_save(trainX, trainY, model, t_seq, q, hidden_neurons_1=hidden_units,
                                     hidden_neurons_2=hidden_units_2, last_hidden_neuron=hidden_units_3, lr=lr,
                                     n_layers=n_layers, recurrent_dropout=recurrent_dropout)
+        '''save_configuration(t_seq, H, q, n_layers, hidden_units, hidden_units_2, hidden_units_3, lr, model_path,
+                           configuration)'''
         save_configuration(t_seq, H, q, n_layers, hidden_units, hidden_units_2, hidden_units_3, lr, model_path,
                            configuration, scaler)
