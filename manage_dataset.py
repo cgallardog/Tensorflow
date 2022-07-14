@@ -37,7 +37,7 @@ def create_dataset(train_samples, eval_samples, test_samples, data_path, feature
             hr_data = data_path + 'ritmo-cardiaco/Ritmo_cardiaco_dia_{}.txt'.format(i)
             hr_data = pd.read_csv(hr_data, delim_whitespace=True, names=hr_columns, dtype=np.float64)
             hr_data = hr_data.to_numpy()
-            train_dataset[index, :, 3] = hr_data[:, 0]
+            train_dataset[index, :, 1] = hr_data[:, 0]
 
         if features >= 5:
             steps_data = data_path + 'Pasos/Pasos_dia_{}.txt'.format(i)
@@ -70,7 +70,7 @@ def create_dataset(train_samples, eval_samples, test_samples, data_path, feature
             hr_data = data_path + 'ritmo-cardiaco/Ritmo_cardiaco_dia_{}.txt'.format(i)
             hr_data = pd.read_csv(hr_data, delim_whitespace=True, names=hr_columns, dtype=np.float64)
             hr_data = hr_data.to_numpy()
-            eval_dataset[index, :, 3] = hr_data[:, 0]
+            eval_dataset[index, :, 1] = hr_data[:, 0]
 
         if features >= 5:
             steps_data = data_path + 'Pasos/Pasos_dia_{}.txt'.format(i)
@@ -104,7 +104,7 @@ def create_dataset(train_samples, eval_samples, test_samples, data_path, feature
             hr_data = data_path + 'ritmo-cardiaco/Ritmo_cardiaco_dia_{}.txt'.format(i)
             hr_data = pd.read_csv(hr_data, delim_whitespace=True, names=hr_columns, dtype=np.float64)
             hr_data = hr_data.to_numpy()
-            test_dataset[index, :, 3] = hr_data[:, 0]
+            test_dataset[index, :, 1] = hr_data[:, 0]
 
         if features >= 5:
             steps_data = data_path + 'Pasos/Pasos_dia_{}.txt'.format(i)
