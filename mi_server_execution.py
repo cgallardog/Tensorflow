@@ -107,24 +107,28 @@ for t_seq in all_t_seq:
         valY = np.reshape(valY, (valY.shape[0] * valY.shape[1], H))
 
         n_layers = parameters.get_combinaciones_n_layers()
-        hidden_units, hidden_units_2, hidden_units_3 = parameters.get_fixed_neurons()
+        n1, n2, n3 = parameters.get_fixed_neurons()
         lr = parameters.get_fixed_lr()
         dropout, recurrent_dropout = parameters.get_dropout()
-        LSTM_model = tf_model.TF_LSTM(input_shape=(trainX.shape[1], trainX.shape[2]), hidden_units=hidden_units,
-                                      hidden_units_2=hidden_units_2, hidden_units_3=hidden_units_3,
-                                      layers=n_layers, dropout=dropout, recurrent_dropout=recurrent_dropout)
-        model = LSTM_model.build()
-        # neurons1, neurons2, neurons3, neurons4, lr, n_layers = model.get_parameters()
-        model.compile(loss=RMSE,
-                      optimizer=tf.keras.optimizers.Adam(learning_rate=lr),
-                      metrics=[tf.keras.metrics.RootMeanSquaredError(),
-                               tf.keras.metrics.MeanAbsoluteError()])
+        for layer in n_layers:
+            for hidden_units in n1:
+                for hidden_units_2 in n2:
+                    for hidden_units_3 in n3:
+                        LSTM_model = tf_model.TF_LSTM(input_shape=(trainX.shape[1], trainX.shape[2]), hidden_units=hidden_units,
+                                                      hidden_units_2=hidden_units_2, hidden_units_3=hidden_units_3,
+                                                      layers=layer, dropout=dropout, recurrent_dropout=recurrent_dropout)
+                        model = LSTM_model.build()
+                        # neurons1, neurons2, neurons3, neurons4, lr, n_layers = model.get_parameters()
+                        model.compile(loss=RMSE,
+                                      optimizer=tf.keras.optimizers.Adam(learning_rate=lr),
+                                      metrics=[tf.keras.metrics.RootMeanSquaredError(),
+                                               tf.keras.metrics.MeanAbsoluteError()])
 
-        # lo entrenamos y testeamos
-        model_path = train_and_save(trainX, trainY, model, t_seq, q, hidden_neurons_1=hidden_units,
-                                    hidden_neurons_2=hidden_units_2, last_hidden_neuron=hidden_units_3, lr=lr,
-                                    n_layers=n_layers, recurrent_dropout=recurrent_dropout)
-        '''save_configuration(t_seq, H, q, n_layers, hidden_units, hidden_units_2, hidden_units_3, lr, model_path,
-                           configuration)'''
-        save_configuration(t_seq, H, q, n_layers, hidden_units, hidden_units_2, hidden_units_3, lr, model_path,
-                           configuration, scaler)
+                        # lo entrenamos y testeamos
+                        model_path = train_and_save(trainX, trainY, model, t_seq, q, hidden_neurons_1=hidden_units,
+                                                    hidden_neurons_2=hidden_units_2, last_hidden_neuron=hidden_units_3, lr=lr,
+                                                    n_layers=layer, recurrent_dropout=recurrent_dropout)
+                        '''save_configuration(t_seq, H, q, layer, hidden_units, hidden_units_2, hidden_units_3, lr, model_path,
+                                           configuration)'''
+                        save_configuration(t_seq, H, q, layer, hidden_units, hidden_units_2, hidden_units_3, lr, model_path,
+                                           configuration, scaler)
