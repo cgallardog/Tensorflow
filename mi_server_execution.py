@@ -27,7 +27,7 @@ def train_and_save(trainX, trainY, model, t_seq, q, hidden_neurons_1=0, hidden_n
                                                                                      hidden_neurons_1, hidden_neurons_2,
                                                                                      last_hidden_neuron, n_layers, lr,
                                                                                      recurrent_dropout)
-    model_path = 'OptimizacionParametros/' + model_file + '/'
+    model_path = 'OptimizacionParametros/GLU_HR' + model_file + '/'
     checkpoint_path = model_path + model_file + '.tf'
 
     model_checkpoint = tf.keras.callbacks.ModelCheckpoint(checkpoint_path, save_best_only=True, save_weights_only=True)
@@ -72,8 +72,8 @@ tf.config.experimental.set_memory_growth(device=gpus[0], enable=True)
 
 data_path = "Dataset/zTodos/"
 
-if not os.path.exists('OptimizacionParametros'):
-    os.mkdir('OptimizacionParametros')
+if not os.path.exists('OptimizacionParametros/GLU_HR'):
+    os.mkdir('OptimizacionParametros/GLU_HR')
 
 # recogemos todas las muestras, ya divididas
 all_samples, training_samples, eval_samples, test_samples = dataset_samples.get_dataset()
