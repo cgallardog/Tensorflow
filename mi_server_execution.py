@@ -132,4 +132,3 @@ for t_seq in all_t_seq:
                                            configuration)'''
                         save_configuration(t_seq, H, q, layer, hidden_units, hidden_units_2, hidden_units_3, lr, model_path,
                                            configuration, scaler)
-
