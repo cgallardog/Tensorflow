@@ -31,7 +31,7 @@ def train_and_save(trainX, trainY, model, t_seq, q, hidden_neurons_1=0, hidden_n
     checkpoint_path = model_path + model_file + '.tf'
 
     model_checkpoint = tf.keras.callbacks.ModelCheckpoint(checkpoint_path, save_best_only=True, save_weights_only=True)
-    tensorboard_checkpoint = tf.keras.callbacks.TensorBoard('logs/scalars/{}'.format(model_file), update_freq=1)
+    tensorboard_checkpoint = tf.keras.callbacks.TensorBoard('GLU_HR/scalars/{}'.format(model_file), update_freq=1)
     stop_fit_early = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=10)
 
     history = model.fit(trainX, trainY, validation_split=0.25, shuffle=True, epochs=100,
