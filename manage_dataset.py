@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 
-def create_dataset(train_samples, eval_samples, test_samples, data_path, features=2):
+def create_dataset(train_samples, eval_samples, test_samples, data_path, features=4):
 
     train_dataset = np.empty(shape=(len(train_samples), 288, features))
     eval_dataset = np.empty(shape=(len(eval_samples), 288, features))
