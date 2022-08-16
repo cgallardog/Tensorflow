@@ -152,6 +152,8 @@ for i in range(len(all_models)):
     print(all_models[i])
     if all_models[i] == 'Models':
         continue
+    if all_models[i] == 'GLU_HR':
+        continue
     # cargamos todas las variables necesarias
     conf_path = 'OptimizacionParametros/' + all_models[i] + '/configuracion.txt'
     model_params = pd.read_csv(conf_path, delim_whitespace=True)
@@ -204,5 +206,8 @@ for i in range(len(all_models)):
 
     plot_results(y_hat, y_original, result_path, test_samples, num_samples)
     conf_index += 1
+    hypo_counter = (y_original < 70).sum()
+    hyper_counter = (y_original > 180).sum()
+    print('Hyperglycaemia:{}, Hypoglycaemia:{}'.format(hyper_counter/len(y_original), hypo_counter/len(y_original)))
 
 all_metrics.to_excel(dir_models + '/mejores_metricas.xlsx', header=True, index=False)

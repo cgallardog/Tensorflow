@@ -36,16 +36,16 @@ class TF_LSTM:
 
         '''i = Input(shape=self.input_shape)
 
-        x = LSTM(self.hidden_units, dropout=self.dropout, recurrent_dropout=self.recurrent_dropout,
-                 return_sequences=True)(i)
-        x = LSTM(self.hidden_units_2, dropout=self.dropout, recurrent_dropout=self.recurrent_dropout,
-                 return_sequences=True)(x)
-        x = LSTM(32, dropout=self.dropout, recurrent_dropout=self.recurrent_dropout,
-                 return_sequences=True)(x)
-        x = LSTM(16, dropout=self.dropout, recurrent_dropout=self.recurrent_dropout,
-                 return_sequences=True)(x)
-        x = LSTM(self.hidden_units_3, dropout=self.dropout, recurrent_dropout=self.recurrent_dropout,
-                 return_sequences=False)(x)
+        x = LSTM(64, dropout=self.dropout, recurrent_dropout=self.recurrent_dropout,
+                 return_sequences=True, kernel_regularizer=tensorflow.keras.regularizers.L2(0.001))(i)
+        x = LSTM(128, dropout=self.dropout, recurrent_dropout=self.recurrent_dropout,
+                 return_sequences=True, kernel_regularizer=tensorflow.keras.regularizers.L2(0.001))(x)
+        x = LSTM(256, dropout=self.dropout, recurrent_dropout=self.recurrent_dropout,
+                 return_sequences=True, kernel_regularizer=tensorflow.keras.regularizers.L2(0.001))(x)
+        x = LSTM(128, dropout=self.dropout, recurrent_dropout=self.recurrent_dropout,
+                 return_sequences=True, kernel_regularizer=tensorflow.keras.regularizers.L2(0.001))(x)
+        x = LSTM(64, dropout=self.dropout, recurrent_dropout=self.recurrent_dropout,
+                 return_sequences=False, kernel_regularizer=tensorflow.keras.regularizers.L2(0.001))(x)
         x = Dense(self.output_shape, activation=None)(x)'''
 
         return Model(inputs=[i], outputs=[x])

@@ -17,7 +17,7 @@ import manage_dataset
 def train_and_save(trainX, trainY, model, t_seq, q, hidden_neurons_1=0, hidden_neurons_2=0, last_hidden_neuron=0,
                    lr=0.01, n_layers=1, recurrent_dropout=0.0, extrapolated=1):
     if n_layers == 1:
-        model_file = 'tseq_{}_q_{}_neurons_{}_l{}_lr_{}_INS_ING'.format(t_seq, q, hidden_neurons_1, n_layers, lr)
+        model_file = 'tseq_{}_q_{}_neurons_{}_l{}_lr_{}'.format(t_seq, q, hidden_neurons_1, n_layers, lr)
     elif n_layers == 2:
         model_file = 'tseq_{}_q_{}_neurons_{}_last_neurons_{}_l{}_lr_{}'.format(t_seq, q, hidden_neurons_1,
                                                                                 last_hidden_neuron, n_layers, lr)
@@ -27,7 +27,7 @@ def train_and_save(trainX, trainY, model, t_seq, q, hidden_neurons_1=0, hidden_n
                                                                                      hidden_neurons_1, hidden_neurons_2,
                                                                                      last_hidden_neuron, n_layers, lr,
                                                                                      recurrent_dropout)
-    model_path = 'OptimizacionParametros/GLU_HR' + model_file + '/'
+    model_path = 'OptimizacionParametros/GLU_HR/' + model_file + '/'
     checkpoint_path = model_path + model_file + '.tf'
 
     model_checkpoint = tf.keras.callbacks.ModelCheckpoint(checkpoint_path, save_best_only=True, save_weights_only=True)
@@ -123,12 +123,13 @@ for t_seq in all_t_seq:
                                       optimizer=tf.keras.optimizers.Adam(learning_rate=lr),
                                       metrics=[tf.keras.metrics.RootMeanSquaredError(),
                                                tf.keras.metrics.MeanAbsoluteError()])
+                        model.summary()
 
                         # lo entrenamos y testeamos
                         model_path = train_and_save(trainX, trainY, model, t_seq, q, hidden_neurons_1=hidden_units,
-                                                    hidden_neurons_2=hidden_units_2, last_hidden_neuron=hidden_units_3, lr=lr,
-                                                    n_layers=layer, recurrent_dropout=recurrent_dropout)
-                        '''save_configuration(t_seq, H, q, layer, hidden_units, hidden_units_2, hidden_units_3, lr, model_path,
-                                           configuration)'''
-                        save_configuration(t_seq, H, q, layer, hidden_units, hidden_units_2, hidden_units_3, lr, model_path,
-                                           configuration, scaler)
+                                                    hidden_neurons_2=hidden_units_2, last_hidden_neuron=hidden_units_3,
+                                                    lr=lr, n_layers=layer, recurrent_dropout=recurrent_dropout)
+                        '''save_configuration(t_seq, H, q, layer, hidden_units, hidden_units_2, hidden_units_3, lr, 
+                                           model_path, configuration)'''
+                        save_configuration(t_seq, H, q, layer, hidden_units, hidden_units_2, hidden_units_3, lr,
+                                           model_path, configuration, scaler)
