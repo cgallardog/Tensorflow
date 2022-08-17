@@ -152,7 +152,7 @@ for i in range(len(all_models)):
     print(all_models[i])
     if all_models[i] == 'Models':
         continue
-    if all_models[i] == 'GLU_HR':
+    if all_models[i] =='GLU_HR':
         continue
     if all_models[i].find('feat_2') != -1:
         continue
