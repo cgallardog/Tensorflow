@@ -27,11 +27,11 @@ def train_and_save(trainX, trainY, model, t_seq, q, hidden_neurons_1=0, hidden_n
                                                                                      hidden_neurons_1, hidden_neurons_2,
                                                                                      last_hidden_neuron, n_layers, lr,
                                                                                      recurrent_dropout)
-    model_path = 'OptimizacionParametros/GLU_3_Ohio/' + model_file + '/'
+    model_path = 'OptimizacionParametros/GLU_3_HR_INS/' + model_file + '/'
     checkpoint_path = model_path + model_file + '.tf'
 
     model_checkpoint = tf.keras.callbacks.ModelCheckpoint(checkpoint_path, save_best_only=True, save_weights_only=True)
-    tensorboard_checkpoint = tf.keras.callbacks.TensorBoard('GLU_3_Ohio/scalars/{}'.format(model_file), update_freq=1)
+    tensorboard_checkpoint = tf.keras.callbacks.TensorBoard('GLU_3_HR_INS/scalars/{}'.format(model_file), update_freq=1)
     stop_fit_early = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=10)
 
     history = model.fit(trainX, trainY, validation_split=0.25, shuffle=True, epochs=100,
@@ -72,8 +72,8 @@ tf.config.experimental.set_memory_growth(device=gpus[0], enable=True)
 
 data_path = "Dataset/zTodos/"
 
-if not os.path.exists('OptimizacionParametros/GLU_3_Ohio'):
-    os.mkdir('OptimizacionParametros/GLU_3_Ohio')
+if not os.path.exists('OptimizacionParametros/GLU_3_HR_INS'):
+    os.mkdir('OptimizacionParametros/GLU_3_HR_INS')
 
 # recogemos todas las muestras, ya divididas
 all_samples, training_samples, eval_samples, test_samples = dataset_samples.get_dataset()
