@@ -3,7 +3,7 @@ class CombinacionParametrosRedOptimizar():
     def __init__(self):
         self.combinaciones_t_seq = [12]  # Input dimension a la red
         self.combinaciones_q = [5]  # Prediction horizon is H+q
-        self.combinaciones_n_layers = [3, 4, 5]
+        self.combinaciones_n_layers = [2, 3, 4, 5]
         self.neurons_layer_1 = [32, 64, 128, 256]
         self.neurons_layer_2 = [32, 64, 128, 256]
         self.neurons_layer_3 = [32, 64, 128, 256]
