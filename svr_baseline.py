@@ -56,8 +56,8 @@ H = 1
 
 # normalizamos los datos de train y validation
 # train_dataset, eval_dataset = dt.data_normalize(train_dataset, eval_dataset)
-train_dataset, eval_dataset, scaler = dt.data_standarization(train_dataset, eval_dataset)
-test_dataset, mean, stdev = dt.data_test_standarization_2(train_dataset, eval_dataset, test_dataset)
+'''train_dataset, eval_dataset, scaler = dt.data_standarization(train_dataset, eval_dataset)
+test_dataset, mean, stdev = dt.data_test_standarization_2(train_dataset, eval_dataset, test_dataset)'''
 
 configuration = pd.DataFrame(columns=['t_seq', 'H', 'q', 'n_layers', 'n_neuronas', 'n_neuronas_2', 'n_neuronas_last',
                                       'optimizer_alg', 'name_optimizer', 'LR'])
@@ -81,9 +81,10 @@ for t_seq in all_t_seq:
 
         y_hat = model.predict(testX[:, :, 0])
         y_hat = y_hat.flatten()
-        y_hat = (y_hat * stdev) + mean
+        '''y_hat = (y_hat * stdev) + mean
 
-        y = np.array([(p * stdev) + mean for p in testY])
+        y = np.array([(p * stdev) + mean for p in testY])'''
+        y = testY
         y = y.flatten()
         pearson_correlation = pearsonr(y_hat, y)
         rmse = mean_squared_error(y, y_hat, squared=False)
