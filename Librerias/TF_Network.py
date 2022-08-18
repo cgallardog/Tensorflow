@@ -25,7 +25,7 @@ class TF_LSTM:
 
         x = LSTM(self.hidden_units, dropout=self.dropout, recurrent_dropout=self.recurrent_dropout,
                  return_sequences=self.layers > 0, kernel_regularizer=tensorflow.keras.regularizers.L2(0.001))(i)
-        if self.layers > 1:
+        if self.layers > 0:
             for _ in range(self.layers - 2):
                 x = LSTM(self.hidden_units_2, dropout=self.dropout, recurrent_dropout=self.recurrent_dropout,
                          return_sequences=True, kernel_regularizer=tensorflow.keras.regularizers.L2(0.001))(x)

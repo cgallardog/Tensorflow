@@ -188,14 +188,13 @@ def decide_extrapolation():
 
 def main():
     _, _, _, test_data = dataset_samples.get_dataset()
-    modo_extrapolacion = decide_extrapolation()
-    all_models = os.listdir(path='OptimizacionParametros')
+    all_models = os.listdir(path='OptimizacionParametros/4_feat')
     all_percentages = pd.DataFrame(columns=['Model', 'A_zone', 'B_zone', 'C_zone', 'D_zone', 'E_zone'])
-    for i in range(len(all_models) - 1):
+    for i in range(len(all_models)):
         if all_models[i] == 'Models':
             continue
         # cargamos todas las variables necesarias
-        conf_path = 'OptimizacionParametros/' + all_models[i] + '/configuracion.txt'
+        conf_path = 'OptimizacionParametros/4_feat/' + all_models[i] + '/configuracion.txt'
         configuration = pd.read_csv(conf_path, delim_whitespace=True, header=0)
 
         t_seq = int(configuration['t_seq'])
@@ -208,18 +207,9 @@ def main():
         lr = float(configuration['LR'])
 
         model_file = all_models[i]
-        if modo_extrapolacion == 1:
-            directory = "OptimizacionParametros/Models/filtered/" + model_file + "/Ficheros/"
-            file_dir_path = 'OptimizacionParametros/Models/filtered/' + model_file + '/' + model_file
-            save_path = 'OptimizacionParametros/Models/filtered/clarke_error_percentages.xlsx'
-        elif modo_extrapolacion == 2:
-            directory = "OptimizacionParametros/Models/unfiltered/" + model_file + "/Ficheros/"
-            file_dir_path = 'OptimizacionParametros/Models/unfiltered/' + model_file + '/' + model_file
-            save_path = 'OptimizacionParametros/Models/unfiltered/clarke_error_percentages.xlsx'
-        else:
-            directory = "OptimizacionParametros/Models/extrapolated/" + model_file + "/Ficheros/"
-            file_dir_path = 'OptimizacionParametros/Models/extrapolated/' + model_file + '/' + model_file
-            save_path = 'OptimizacionParametros/Models/extrapolated/clarke_error_percentages.xlsx'
+        directory = "OptimizacionParametros/Models/filtered/" + model_file + "/Ficheros/"
+        file_dir_path = 'OptimizacionParametros/4_feat/' + model_file + '/' + model_file
+        save_path = 'OptimizacionParametros/4_feat/' + model_file + '/clarke_error_percentages.xlsx'
         first = True
         for p in test_data:
             file = 'prediction_profile_{}.csv'.format(p)
@@ -237,7 +227,7 @@ def main():
         plot.savefig(file_dir_path, format='eps')
         total_percentages = zone_percentages(model_file, zone)
         all_percentages = pd.concat([all_percentages, total_percentages])
-    all_percentages.to_excel(save_path, header=True, index=False)
+        all_percentages.to_excel(save_path, header=True, index=False)
 
 if __name__ == '__main__':
     main()
