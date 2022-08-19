@@ -7,6 +7,7 @@ from sklearn.svm import SVR
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 from scipy.stats import pearsonr
 import os
+from ClarkeErrorGrid import zone_percentages, clarke_error_grid
 
 import Librerias.dataset_pacientes_y_ficheros_nuevo as dataset_samples
 import Librerias.ConfiguracionOptimizacionParametrosForServer as param_conf
@@ -92,3 +93,10 @@ for t_seq in all_t_seq:
         mae = mean_absolute_error(y, y_hat)
 
         print('RMSE:{}, MAE:{}, Pearson Correlation:{}'.format(rmse, mae, pearson_correlation))
+
+        y = pd.DataFrame(y)
+        y_hat = pd.DataFrame(y_hat)
+        plot, zone = clarke_error_grid(y, y_hat, 'tseq_{}_H_1_q_{}'.format(t_seq, q))
+        total_percentages = zone_percentages('SVR', zone)
+        all_percentages = pd.concat([all_percentages, total_percentages])
+        all_percentages.head(1)
