@@ -21,7 +21,7 @@ def create_dataset(train_samples, eval_samples, test_samples, data_path, feature
         glu_data = glu_data.to_numpy()
         train_dataset[index, :, 0] = glu_data[:, 1]
 
-        if features >= 2:
+        if features >= 3:
             ins_path = data_path + 'Insulina/Insulina_ADM_288_dia_{}.txt'.format(i)
             ins_data = pd.read_csv(ins_path, delim_whitespace=True, names=ins_columns, dtype=np.float64)
             ins_data = ins_data.to_numpy()
@@ -33,7 +33,7 @@ def create_dataset(train_samples, eval_samples, test_samples, data_path, feature
             ing_data = ing_data.to_numpy()
             train_dataset[index, :, 2] = ing_data[:, 0]
 
-        if features >= 3:
+        if features >= 2:
             hr_data = data_path + 'ritmo-cardiaco/Ritmo_cardiaco_dia_{}.txt'.format(i)
             hr_data = pd.read_csv(hr_data, delim_whitespace=True, names=hr_columns, dtype=np.float64)
             hr_data = hr_data.to_numpy()
@@ -54,7 +54,7 @@ def create_dataset(train_samples, eval_samples, test_samples, data_path, feature
         glu_data = glu_data.to_numpy()
         eval_dataset[index, :, 0] = glu_data[:, 1]
 
-        if features >= 2:
+        if features >= 3:
             ins_path = data_path + 'Insulina/Insulina_ADM_288_dia_{}.txt'.format(i)
             ins_data = pd.read_csv(ins_path, delim_whitespace=True, names=ins_columns, dtype=np.float64)
             ins_data = ins_data.to_numpy()
@@ -66,7 +66,7 @@ def create_dataset(train_samples, eval_samples, test_samples, data_path, feature
             ing_data = ing_data.to_numpy()
             eval_dataset[index, :, 2] = ing_data[:, 0]
 
-        if features >= 3:
+        if features >= 2:
             hr_data = data_path + 'ritmo-cardiaco/Ritmo_cardiaco_dia_{}.txt'.format(i)
             hr_data = pd.read_csv(hr_data, delim_whitespace=True, names=hr_columns, dtype=np.float64)
             hr_data = hr_data.to_numpy()
@@ -88,7 +88,7 @@ def create_dataset(train_samples, eval_samples, test_samples, data_path, feature
         glu_data = glu_data.to_numpy()
         test_dataset[index, :, 0] = glu_data[:, 1]
 
-        if features >= 2:
+        if features >= 3:
             ins_path = data_path + 'Insulina/Insulina_ADM_288_dia_{}.txt'.format(i)
             ins_data = pd.read_csv(ins_path, delim_whitespace=True, names=ins_columns, dtype=np.float64)
             ins_data = ins_data.to_numpy()
@@ -100,7 +100,7 @@ def create_dataset(train_samples, eval_samples, test_samples, data_path, feature
             ing_data = ing_data.to_numpy()
             test_dataset[index, :, 2] = ing_data[:, 0]
 
-        if features >= 3:
+        if features >= 2:
             hr_data = data_path + 'ritmo-cardiaco/Ritmo_cardiaco_dia_{}.txt'.format(i)
             hr_data = pd.read_csv(hr_data, delim_whitespace=True, names=hr_columns, dtype=np.float64)
             hr_data = hr_data.to_numpy()

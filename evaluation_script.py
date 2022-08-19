@@ -148,68 +148,68 @@ test_dataset, mean, stdev = dt.data_test_standarization_2(train_dataset, eval_da
 
 all_metrics = pd.DataFrame(columns=['model_name', 'MSE', 'RMSE', 'MAE', 'Pearson_correlation'])
 conf_index = 0
-for i in range(len(all_models)):
+'''for i in range(len(all_models)):
     print(all_models[i])
     if all_models[i] == 'Models':
         continue
-    if all_models[i] =='GLU_HR':
+    if all_models[i] =='GLU_3_HR_INS':
         continue
     if all_models[i].find('feat_2') != -1:
-        continue
-    # cargamos todas las variables necesarias
-    conf_path = 'OptimizacionParametros/GLU_3_HR_INS/' + all_models[i] + '/configuracion.txt'
-    model_params = pd.read_csv(conf_path, delim_whitespace=True)
-    t_seq = int(model_params['t_seq'])
-    H = int(model_params['H'])
-    q = int(model_params['q'])
-    n_layers = int(model_params['n_layers'])
-    hidden_neurons_1 = int(model_params['n_neuronas'])
-    hidden_neurons_2 = int(model_params['n_neuronas_2'])
-    last_hidden_neuron = int(model_params['n_neuronas_last'])
-    lr = float(model_params['LR'])
+        continue'''
+# cargamos todas las variables necesarias
+conf_path = 'OptimizacionParametros/GLU_3_HR_INS/t_12_q_5_feat_3_neu_256_mid_neu_256_last_neu_256_l4_lr_0.001_rd_0.0/configuracion.txt'
+model_params = pd.read_csv(conf_path, delim_whitespace=True)
+t_seq = int(model_params['t_seq'])
+H = int(model_params['H'])
+q = int(model_params['q'])
+n_layers = int(model_params['n_layers'])
+hidden_neurons_1 = int(model_params['n_neuronas'])
+hidden_neurons_2 = int(model_params['n_neuronas_2'])
+last_hidden_neuron = int(model_params['n_neuronas_last'])
+lr = float(model_params['LR'])
 
-    model_file = all_models[i]
-    metrics_file = 'metricas_mean_sd_' + all_models[i] + '.xlsx'
+model_file = 't_12_q_5_feat_3_neu_256_mid_neu_256_last_neu_256_l4_lr_0.001_rd_0.0'
+metrics_file = 'metricas_mean_sd_t_12_q_5_feat_3_neu_256_mid_neu_256_last_neu_256_l4_lr_0.001_rd_0.0.xlsx'
 
-    model_path = 'OptimizacionParametros/GLU_3_HR_INS/' + model_file + '/' + model_file + '.tf'
-    '''
-    if extrapolate == 1:
-        testX, testY = prepare_dataset(t_seq, q, H, test_dataset)
-    else:
-        testX, testY = prepare_extrapolated_dataset(t_seq, q, H, test_dataset)
-    '''
-    testX, testY = main_script.prepare_dataset(t_seq, q, H, test_dataset)
+model_path = 'OptimizacionParametros/GLU_3_HR_INS/' + model_file + '/' + model_file + '.tf'
+'''
+if extrapolate == 1:
+    testX, testY = prepare_dataset(t_seq, q, H, test_dataset)
+else:
+    testX, testY = prepare_extrapolated_dataset(t_seq, q, H, test_dataset)
+'''
+testX, testY = main_script.prepare_dataset(t_seq, q, H, test_dataset)
 
-    # testX, testY = shuffle(testX, testY)
-    num_samples = testY.shape[1]
-    testX = np.reshape(testX, (testX.shape[0] * testX.shape[1], t_seq, testX.shape[3]))
-    testY = np.reshape(testY, (testY.shape[0] * testY.shape[1], H))
+# testX, testY = shuffle(testX, testY)
+num_samples = testY.shape[1]
+testX = np.reshape(testX, (testX.shape[0] * testX.shape[1], t_seq, testX.shape[3]))
+testY = np.reshape(testY, (testY.shape[0] * testY.shape[1], H))
 
-    model = tf_model.TF_LSTM(input_shape=(testX.shape[1], testX.shape[2]), hidden_units=hidden_neurons_1,
-                             hidden_units_2=hidden_neurons_2, hidden_units_3=last_hidden_neuron,
-                             layers=n_layers, lr=lr)
-    model = model.build()
-    model.compile(loss=RMSE,
-                  optimizer='adam',
-                  metrics=tf.metrics.RootMeanSquaredError())
-    model.load_weights(model_path)
+model = tf_model.TF_LSTM(input_shape=(testX.shape[1], testX.shape[2]), hidden_units=hidden_neurons_1,
+                         hidden_units_2=hidden_neurons_2, hidden_units_3=last_hidden_neuron,
+                         layers=n_layers, lr=lr)
+model = model.build()
+model.compile(loss=RMSE,
+              optimizer='adam',
+              metrics=tf.metrics.RootMeanSquaredError())
+model.load_weights(model_path)
 
-    #model = tf.keras.models.load_model('OptimizacionParametros/tseq_12_q_5_neurons_128_neurons2_0_neurons3_0_lr_0.01/2tseq_12_q_5_neurons_128_neurons2_0_neurons3_0_lr_0.01.tf')
-    model.summary()
-    # model = tf_model.TF_LSTM()
-    # neurons1, neurons2, neurons3, neurons4, lr, n_layers = model.get_parameters()
+#model = tf.keras.models.load_model('OptimizacionParametros/tseq_12_q_5_neurons_128_neurons2_0_neurons3_0_lr_0.01/2tseq_12_q_5_neurons_128_neurons2_0_neurons3_0_lr_0.01.tf')
+model.summary()
+# model = tf_model.TF_LSTM()
+# neurons1, neurons2, neurons3, neurons4, lr, n_layers = model.get_parameters()
 
-    # lo entrenamos y testeamos
-    rmse, mse, mae, pearson_correlation, y_hat, y_original = evaluate_results(testX, testY, model, mean, stdev)
+# lo entrenamos y testeamos
+rmse, mse, mae, pearson_correlation, y_hat, y_original = evaluate_results(testX, testY, model, mean, stdev)
 
-    # params = tf_model.TF_LSTM()
+# params = tf_model.TF_LSTM()
 
-    result_path = save_and_show_results(pearson_correlation, mse, rmse, mae, model_file, conf_index, all_metrics)
+result_path = save_and_show_results(pearson_correlation, mse, rmse, mae, model_file, conf_index, all_metrics)
 
-    plot_results(y_hat, y_original, result_path, test_samples, num_samples)
-    conf_index += 1
-    hypo_counter = (y_original < 70).sum()
-    hyper_counter = (y_original > 180).sum()
-    print('Hyperglycaemia:{}, Hypoglycaemia:{}'.format(hyper_counter/len(y_original), hypo_counter/len(y_original)))
+plot_results(y_hat, y_original, result_path, test_samples, num_samples)
+conf_index += 1
+hypo_counter = (y_original < 70).sum()
+hyper_counter = (y_original > 180).sum()
+print('Hyperglycaemia:{}, Hypoglycaemia:{}'.format(hyper_counter/len(y_original), hypo_counter/len(y_original)))
 
 all_metrics.to_excel(dir_models + '/mejores_metricas_HR_INS.xlsx', header=True, index=False)

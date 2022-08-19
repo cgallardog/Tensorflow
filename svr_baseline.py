@@ -94,9 +94,16 @@ for t_seq in all_t_seq:
 
         print('RMSE:{}, MAE:{}, Pearson Correlation:{}'.format(rmse, mae, pearson_correlation))
 
-        y = pd.DataFrame(y)
-        y_hat = pd.DataFrame(y_hat)
+        y_original = np.reshape(y, (len(y), 1))
+        y_hat = np.reshape(y_hat, (len(y_hat), 1))
+        predictions = np.concatenate((y_original, y_hat), axis=1)
+        pred_df = pd.DataFrame(predictions, columns=['Y_1', 'y_hat_1'])
+
+        y = pred_df['Y_1']
+        y_hat = pred_df['y_hat_1']
         plot, zone = clarke_error_grid(y, y_hat, 'tseq_{}_H_1_q_{}'.format(t_seq, q))
         total_percentages = zone_percentages('SVR', zone)
+        all_percentages = pd.DataFrame(columns=['Model', 'A_zone', 'B_zone', 'C_zone', 'D_zone', 'E_zone'])
         all_percentages = pd.concat([all_percentages, total_percentages])
         all_percentages.head(1)
+        print('ya')
