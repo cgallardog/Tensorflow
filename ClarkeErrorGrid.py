@@ -188,13 +188,13 @@ def decide_extrapolation():
 
 def main():
     _, _, _, test_data = dataset_samples.get_dataset()
-    all_models = os.listdir(path='OptimizacionParametros/Ohio_2018')
+    all_models = os.listdir(path='OptimizacionParametros/GLU_3_HR_INS')
     all_percentages = pd.DataFrame(columns=['Model', 'A_zone', 'B_zone', 'C_zone', 'D_zone', 'E_zone'])
     for i in range(len(all_models)):
         if all_models[i] == 'Models':
             continue
         # cargamos todas las variables necesarias
-        conf_path = 'OptimizacionParametros/Ohio_2018/' + all_models[i] + '/configuracion.txt'
+        conf_path = 'OptimizacionParametros/GLU_3_HR_INS/' + all_models[i] + '/configuracion.txt'
         configuration = pd.read_csv(conf_path, delim_whitespace=True, header=0)
 
         t_seq = int(configuration['t_seq'])
@@ -208,8 +208,8 @@ def main():
 
         model_file = all_models[i]
         directory = "OptimizacionParametros/Models/filtered/" + model_file + "/Ficheros/"
-        file_dir_path = 'OptimizacionParametros/Ohio_2018/' + model_file + '/' + model_file
-        save_path = 'OptimizacionParametros/Ohio_2018/' + model_file + '/clarke_error_percentages.xlsx'
+        file_dir_path = 'OptimizacionParametros/GLU_3_HR_INS/' + model_file + '/' + model_file
+        save_path = 'OptimizacionParametros/GLU_3_HR_INS/' + model_file + '/clarke_error_percentages.xlsx'
         first = True
         for p in test_data:
             file = 'prediction_profile_{}.csv'.format(p)
