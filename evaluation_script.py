@@ -212,4 +212,4 @@ for i in range(len(all_models)):
     hyper_counter = (y_original > 180).sum()
     print('Hyperglycaemia:{}, Hypoglycaemia:{}'.format(hyper_counter/len(y_original), hypo_counter/len(y_original)))
 
-all_metrics.to_excel(dir_models + '/mejores_metricas.xlsx', header=True, index=False)
+all_metrics.to_excel(dir_models + '/mejores_metricas_HR_INS.xlsx', header=True, index=False)
