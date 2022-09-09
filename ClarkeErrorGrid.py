@@ -188,46 +188,46 @@ def decide_extrapolation():
 
 def main():
     _, _, _, test_data = dataset_samples.get_dataset()
-    all_models = os.listdir(path='OptimizacionParametros/GLU_3_HR_INS')
+    all_models = os.listdir(path='OptimizacionParametros/GLU_3_Ohio')
     all_percentages = pd.DataFrame(columns=['Model', 'A_zone', 'B_zone', 'C_zone', 'D_zone', 'E_zone'])
-    #for i in range(len(all_models)):
-    '''if all_models[i] == 'Models':
-        continue'''
-    # cargamos todas las variables necesarias
-    conf_path = 'OptimizacionParametros/GLU_3_HR_INS/t_12_q_5_feat_3_neu_256_mid_neu_256_last_neu_256_l4_lr_0.001_rd_0.0/configuracion.txt'
-    configuration = pd.read_csv(conf_path, delim_whitespace=True, header=0)
+    for i in range(len(all_models)):
+        if all_models[i] == 'Models':
+            continue
+        # cargamos todas las variables necesarias
+        conf_path = 'OptimizacionParametros/GLU_3_Ohio/' + all_models[i] + '/configuracion.txt'
+        configuration = pd.read_csv(conf_path, delim_whitespace=True, header=0)
 
-    t_seq = int(configuration['t_seq'])
-    H = int(configuration['H'])
-    q = int(configuration['q'])
-    n_layers = int(configuration['n_layers'])
-    hidden_neurons_1 = int(configuration['n_neuronas'])
-    hidden_neurons_2 = int(configuration['n_neuronas_2'])
-    last_hidden_neuron = int(configuration['n_neuronas_last'])
-    lr = float(configuration['LR'])
+        t_seq = int(configuration['t_seq'])
+        H = int(configuration['H'])
+        q = int(configuration['q'])
+        n_layers = int(configuration['n_layers'])
+        hidden_neurons_1 = int(configuration['n_neuronas'])
+        hidden_neurons_2 = int(configuration['n_neuronas_2'])
+        last_hidden_neuron = int(configuration['n_neuronas_last'])
+        lr = float(configuration['LR'])
 
-    model_file = 't_12_q_5_feat_3_neu_256_mid_neu_256_last_neu_256_l4_lr_0.001_rd_0.0'
-    directory = "OptimizacionParametros/Models/filtered/" + model_file + "/Ficheros/"
-    file_dir_path = 'OptimizacionParametros/GLU_3_HR_INS/' + model_file + '/' + model_file
-    save_path = 'OptimizacionParametros/GLU_3_HR_INS/' + model_file + '/clarke_error_percentages.xlsx'
-    first = True
-    for p in test_data:
-        file = 'prediction_profile_{}.csv'.format(p)
-        path = directory + file
-        df = pd.read_csv(path, delim_whitespace=True, dtype=np.float64)
-        if first:
-            ref_values = df['Y_1']
-            pred_values = df['y_hat_1']
-            first = False
-        else:
-            ref_values = pd.concat([ref_values, df['Y_1']])
-            pred_values = pd.concat([pred_values, df['y_hat_1']])
+        model_file = all_models[i]
+        directory = "OptimizacionParametros/Models/filtered/" + model_file + "/Ficheros/"
+        file_dir_path = 'OptimizacionParametros/GLU_3_Ohio/' + model_file + '/' + model_file
+        save_path = 'OptimizacionParametros/GLU_3_Ohio/' + model_file + '/clarke_error_percentages.xlsx'
+        first = True
+        for p in test_data:
+            file = 'prediction_profile_{}.csv'.format(p)
+            path = directory + file
+            df = pd.read_csv(path, delim_whitespace=True, dtype=np.float64)
+            if first:
+                ref_values = df['Y_1']
+                pred_values = df['y_hat_1']
+                first = False
+            else:
+                ref_values = pd.concat([ref_values, df['Y_1']])
+                pred_values = pd.concat([pred_values, df['y_hat_1']])
 
-    plot, zone = clarke_error_grid(ref_values, pred_values, 'tseq_{}_H_1_q_{}'.format(t_seq, q))
-    plot.savefig(file_dir_path, format='eps')
-    total_percentages = zone_percentages(model_file, zone)
-    all_percentages = pd.concat([all_percentages, total_percentages])
-    all_percentages.to_excel(save_path, header=True, index=False)
+        plot, zone = clarke_error_grid(ref_values, pred_values, 'tseq_{}_H_1_q_{}'.format(t_seq, q))
+        plot.savefig(file_dir_path, format='eps')
+        total_percentages = zone_percentages(model_file, zone)
+        all_percentages = pd.concat([all_percentages, total_percentages])
+        all_percentages.to_excel(save_path, header=True, index=False)
 
 if __name__ == '__main__':
     main()
