@@ -154,8 +154,8 @@ for i in range(len(all_models)):
         continue
     if all_models[i] =='GLU_HR':
         continue
-    if all_models[i].find('feat_2') != -1:
-        continue
+    '''if all_models[i].find('feat_2') != -1:
+        continue'''
     # cargamos todas las variables necesarias
     conf_path = 'OptimizacionParametros/GLU_HR/' + all_models[i] + '/configuracion.txt'
     model_params = pd.read_csv(conf_path, delim_whitespace=True)
