@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 
-def create_dataset(train_samples, eval_samples, test_samples, data_path, features=4):
+def create_dataset(train_samples, eval_samples, test_samples, data_path, features=3):
 
     train_dataset = np.empty(shape=(len(train_samples), 288, features))
     eval_dataset = np.empty(shape=(len(eval_samples), 288, features))
@@ -27,13 +27,13 @@ def create_dataset(train_samples, eval_samples, test_samples, data_path, feature
             ins_data = ins_data.to_numpy()
             train_dataset[index, :, 1] = ins_data[:, 0]
 
-        if features >= 3:
+        if features >= 4:
             ing_path = data_path + 'Ingesta/Glucosa_ING_288_dia_{}.txt'.format(i)
             ing_data = pd.read_csv(ing_path, delim_whitespace=True, names=ing_columns, dtype=np.float64)
             ing_data = ing_data.to_numpy()
             train_dataset[index, :, 2] = ing_data[:, 0]
 
-        if features >= 4:
+        if features >= 3:
             hr_data = data_path + 'ritmo-cardiaco/Ritmo_cardiaco_dia_{}.txt'.format(i)
             hr_data = pd.read_csv(hr_data, delim_whitespace=True, names=hr_columns, dtype=np.float64)
             hr_data = hr_data.to_numpy()
@@ -60,13 +60,13 @@ def create_dataset(train_samples, eval_samples, test_samples, data_path, feature
             ins_data = ins_data.to_numpy()
             eval_dataset[index, :, 1] = ins_data[:, 0]
 
-        if features >= 3:
+        if features >= 4:
             ing_path = data_path + 'Ingesta/Glucosa_ING_288_dia_{}.txt'.format(i)
             ing_data = pd.read_csv(ing_path, delim_whitespace=True, names=ing_columns, dtype=np.float64)
             ing_data = ing_data.to_numpy()
             eval_dataset[index, :, 2] = ing_data[:, 0]
 
-        if features >= 4:
+        if features >= 3:
             hr_data = data_path + 'ritmo-cardiaco/Ritmo_cardiaco_dia_{}.txt'.format(i)
             hr_data = pd.read_csv(hr_data, delim_whitespace=True, names=hr_columns, dtype=np.float64)
             hr_data = hr_data.to_numpy()
@@ -94,13 +94,13 @@ def create_dataset(train_samples, eval_samples, test_samples, data_path, feature
             ins_data = ins_data.to_numpy()
             test_dataset[index, :, 1] = ins_data[:, 0]
 
-        if features >= 3:
+        if features >= 4:
             ing_path = data_path + 'Ingesta/Glucosa_ING_288_dia_{}.txt'.format(i)
             ing_data = pd.read_csv(ing_path, delim_whitespace=True, names=ing_columns, dtype=np.float64)
             ing_data = ing_data.to_numpy()
             test_dataset[index, :, 2] = ing_data[:, 0]
 
-        if features >= 4:
+        if features >= 3:
             hr_data = data_path + 'ritmo-cardiaco/Ritmo_cardiaco_dia_{}.txt'.format(i)
             hr_data = pd.read_csv(hr_data, delim_whitespace=True, names=hr_columns, dtype=np.float64)
             hr_data = hr_data.to_numpy()
