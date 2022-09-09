@@ -140,7 +140,7 @@ else:
     dir_models = "OptimizacionParametros/Models/extrapolated"
     if not os.path.exists(dir_models):
         os.mkdir(dir_models)
-all_models = os.listdir(path='OptimizacionParametros/GLU_3_Ohio')
+all_models = os.listdir(path='OptimizacionParametros/Ohio_2018')
 
 # normalizamos los datos de train y validation
 # train_dataset, eval_dataset = dt.data_normalize(train_dataset, eval_dataset)
@@ -152,12 +152,12 @@ for i in range(len(all_models)):
     print(all_models[i])
     if all_models[i] == 'Models':
         continue
-    if all_models[i] =='GLU_3_Ohio':
+    if all_models[i] =='Ohio_2018':
         continue
     if all_models[i].find('feat_2') != -1:
         continue
     # cargamos todas las variables necesarias
-    conf_path = 'OptimizacionParametros/GLU_3_Ohio/' + all_models[i] + '/configuracion.txt'
+    conf_path = 'OptimizacionParametros/Ohio_2018/' + all_models[i] + '/configuracion.txt'
     model_params = pd.read_csv(conf_path, delim_whitespace=True)
     t_seq = int(model_params['t_seq'])
     H = int(model_params['H'])
@@ -171,7 +171,7 @@ for i in range(len(all_models)):
     model_file = all_models[i]
     metrics_file = 'metricas_mean_sd_' + all_models[i] + '.xlsx'
 
-    model_path = 'OptimizacionParametros/GLU_3_Ohio/' + model_file + '/' + model_file + '.tf'
+    model_path = 'OptimizacionParametros/Ohio_2018/' + model_file + '/' + model_file + '.tf'
     '''
     if extrapolate == 1:
         testX, testY = prepare_dataset(t_seq, q, H, test_dataset)
@@ -212,4 +212,4 @@ for i in range(len(all_models)):
     hyper_counter = (y_original > 180).sum()
     print('Hyperglycaemia:{}, Hypoglycaemia:{}'.format(hyper_counter/len(y_original), hypo_counter/len(y_original)))
 
-all_metrics.to_excel(dir_models + '/mejores_metricas_3_feat_ohio.xlsx', header=True, index=False)
+all_metrics.to_excel(dir_models + '/mejores_metricas_3_feat_ohio_2018.xlsx', header=True, index=False)

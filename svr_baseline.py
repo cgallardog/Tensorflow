@@ -39,7 +39,7 @@ def save_configuration(t_seq, H, q, n_layers, n_neuronas, n_neuronas_2, n_neuron
 gpus = tf.config.experimental.list_physical_devices(device_type='GPU')
 tf.config.experimental.set_memory_growth(device=gpus[0], enable=True)
 
-data_path = "Dataset/zTodos/"
+data_path = "Dataset/zEvaluation/"
 
 if not os.path.exists('OptimizacionParametros/GLU_HR'):
     os.mkdir('OptimizacionParametros/GLU_HR')
