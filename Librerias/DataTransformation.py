@@ -2,27 +2,36 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler
 import numpy as np
 
 
-def data_normalize(train_dataset, eval_dataset):
+def data_normalize(train_dataset):
     scaler = MinMaxScaler()
     samples, features = train_dataset[0].shape
-    all_dataset = np.empty(((len(train_dataset) + len(eval_dataset)) * samples, features))
+    all_dataset = np.empty(((len(train_dataset)) * samples, features))
     all_dataset[:samples] = train_dataset[0, :, :]
-    for i in range(1, len(train_dataset) + len(eval_dataset)):
+    for i in range(1, len(train_dataset)):
         if i < len(train_dataset):
             all_dataset[i * samples:samples * (1 + i), :] = train_dataset[i, :, :]
-        else:
-            index = i - len(train_dataset)
-            all_dataset[i * samples:samples * (1 + i), :] = eval_dataset[index, :, :]
 
     scaler.fit(all_dataset)
 
     for i in range(len(train_dataset)):
         train_dataset[i, :, :] = scaler.transform(train_dataset[i, :, :])
-    for i in range(len(eval_dataset)):
-        eval_dataset[i, :, :] = scaler.transform(eval_dataset[i, :, :])
 
-    return train_dataset, eval_dataset
+    return train_dataset
 
+
+def data_normalization(dataset):
+    '''
+    GLUCOSA: 400
+    RITMO CARDIACO: 300
+    INSULINA: 3
+    CARBOHIDRATOS: 7,5
+    '''
+    max = np.array([400, 3, 7.5])
+    scale = np.array([2, 1, 1])
+    normalized_dataset = np.divide(dataset, max)
+    #normalized_dataset = np.divide(normalized_dataset, scale)
+
+    return normalized_dataset
 
 def data_standarization(train_dataset, eval_dataset):
     scaler = StandardScaler()

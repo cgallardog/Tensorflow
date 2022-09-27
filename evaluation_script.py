@@ -7,23 +7,20 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error
 from scipy.stats import pearsonr
 
 import Librerias.dataset_pacientes_y_ficheros_nuevo as dataset_samples
-import Librerias.ConfiguracionOptimizacionParametrosForServer as param_conf
 import Librerias.DataTransformation as dt
 import Librerias.TF_Network as tf_model
 import manage_dataset as main_script
 from utils import RMSE
 
 
-def evaluate_results(testX, testY, model, mean, stdev):
-    a = model.evaluate(testX, testY)
-    rmse_1 = stdev * model.evaluate(testX, testY)[0]
-    mae_1 = stdev * model.evaluate(testX, testY)[1]
+def evaluate_results(testX, testY, model, mean=None, stdev=None):
+    evaluation = 400 * model.evaluate(testX, testY)
 
     y_hat = model.predict(testX)
     y_hat = y_hat.flatten()
-    y_hat = (y_hat * stdev) + mean
+    y_hat = (y_hat * 400)
 
-    y = np.array([(p * stdev) + mean for p in testY])
+    y = np.array([(p * 400) for p in testY])
     y = y.flatten()
     # x = np.transpose(y_hat)
     # y = np.transpose(testY)
@@ -34,7 +31,21 @@ def evaluate_results(testX, testY, model, mean, stdev):
     mse = mean_squared_error(y, y_hat, squared=True)
     mae = mean_absolute_error(y, y_hat)
 
-    print('RMSE:{}, MAE:{}'.format(rmse, mae))
+    hiper = y>180
+    y_hiper = y*hiper
+    y_hat_hiper = y_hat*hiper
+    y_hiper = y_hiper[y_hiper != 0]
+    y_hat_hiper = y_hat_hiper[y_hat_hiper != 0]
+    rmse_hiper = mean_squared_error(y_hiper, y_hat_hiper, squared=False)
+
+    hipo = y < 70
+    y_hipo = y * hipo
+    y_hat_hipo = y_hat * hipo
+    y_hipo = y_hipo[y_hipo != 0]
+    y_hat_hipo = y_hat_hipo[y_hat_hipo != 0]
+    rmse_hipo = mean_squared_error(y_hipo, y_hat_hipo, squared=False)
+
+    print('RMSE:{}, MAE:{}, RMSE_HIPER:{}, RMSE_HIPO:{}'.format(rmse, mae, rmse_hiper, rmse_hipo))
 
     return rmse, mse, mae, pearson_correlation, y_hat, y
 
@@ -71,38 +82,27 @@ def plot_results(y_hat, y_original, model_path, test_samples, num_samples):
 
     for i in range(len(test_samples)):
         plt.figure('Profile {} '.format(test_samples[i]))
-        plt.plot(tiempo_orig, y_original[i * num_samples:i * num_samples + num_samples], label='original')
-        plt.plot(tiempo_orig, y_hat[i * num_samples:i * num_samples + num_samples], label='prediction')
+        plt.plot(tiempo_orig, y_original[i * num_samples:i * num_samples + num_samples], 'bo-', label='original')
+        plt.plot(tiempo_orig, y_hat[i * num_samples:i * num_samples + num_samples], 'rx', label='prediction')
+        plt.axhline(70, linestyle='--', color='g')
+        plt.axhline(180, linestyle='--', color='g')
         # plt.plot(tiempo_hat_2, y_hat, label='prediction_2')
         plt.xlabel('Time (hours)')
         plt.ylabel('Glucose (mg/dl)')
         plt.title('Profile {}'.format(test_samples[i]))
         plt.legend()
 
-        dir_graf = model_path + '/Graficas/Y_predicha para el profile_{}.eps'.format(test_samples[i])
-        plt.savefig(dir_graf, format='eps')
+        dir_graf = model_path + 'Graficas/Y_predicha para el profile_{}.svg'.format(test_samples[i])
+        plt.savefig(dir_graf, format='svg')
         # plt.show()
         plt.close()
 
-        dir_pred = model_path + '/Ficheros/prediction_profile_{}.csv'.format(test_samples[i])
+        dir_pred = model_path + 'Ficheros/prediction_profile_{}.csv'.format(test_samples[i])
         y_original = np.reshape(y_original, (len(y_original), 1))
         y_hat = np.reshape(y_hat, (len(y_hat), 1))
         predictions = np.concatenate((y_original, y_hat), axis=1)
         pred_df = pd.DataFrame(predictions, columns=['Y_1', 'y_hat_1'])
         pred_df.to_csv(dir_pred, sep='\t', header=True, index=False)
-
-
-def decide_extrapolation():
-    try:
-        modo_extrapolacion = int(input(""" Escriba un numero para seleccionar el modo
-        1: Quiero que el trainset sea filtrado = 1\n
-        2: Quiero que el trainset sea sin filtrar = 2\n
-        3: Quiero que el trainset sea extrapolado = 3\n"""))
-    except Exception:
-        print("Error: Por favor, escriba un numero")
-        modo_extrapolacion = -1
-
-    return modo_extrapolacion
 
 
 # USE_CUDA = tf.test.is_gpu_available()
@@ -112,39 +112,20 @@ tf.config.experimental.set_memory_growth(device=gpus[0], enable=True)
 
 data_path = "Dataset/zEvaluation/"
 
-if not os.path.exists('OptimizacionParametros'):
-    os.mkdir('OptimizacionParametros')
-
-modo_extrapolacion = 1
-
 # recogemos todas las muestras, ya divididas
 all_samples, training_samples, eval_samples, test_samples = dataset_samples.get_dataset()
+
 # cargamos y dividimos los dataset, juntando todos los datos en un mismo array
-if modo_extrapolacion == 1:
-    train_dataset, eval_dataset, test_dataset = main_script.create_dataset(training_samples, eval_samples, test_samples,
-                                                                           data_path)
-    dir_models = "OptimizacionParametros/Models/filtered"
-    if not os.path.exists(dir_models):
-        os.mkdir(dir_models)
-elif modo_extrapolacion == 2:
-    train_dataset, eval_dataset, test_dataset = main_script.create_extrapolated_test_dataset(training_samples,
-                                                                                             eval_samples,
-                                                                                             test_samples, data_path)
-    dir_models = "OptimizacionParametros/Models/unfiltered"
-    if not os.path.exists(dir_models):
-        os.mkdir(dir_models)
-else:
-    data_path = "Dataset/Todos/"
-    train_dataset, eval_dataset, test_dataset = main_script.create_dataset(training_samples, eval_samples,
-                                                                           test_samples, data_path)
-    dir_models = "OptimizacionParametros/Models/extrapolated"
-    if not os.path.exists(dir_models):
-        os.mkdir(dir_models)
-all_models = os.listdir(path='OptimizacionParametros/GLU_HR')
+train_dataset, eval_dataset, test_dataset = main_script.create_dataset(training_samples, eval_samples, test_samples,
+                                                                       data_path)
+dir_models = "OptimizacionParametros/Models/GLU_3_Ohio"
+if not os.path.exists(dir_models):
+    os.mkdir(dir_models)
+all_models = os.listdir(path='OptimizacionParametros/GLU_3_Ohio')
 
 # normalizamos los datos de train y validation
-# train_dataset, eval_dataset = dt.data_normalize(train_dataset, eval_dataset)
-test_dataset, mean, stdev = dt.data_test_standarization_2(train_dataset, eval_dataset, test_dataset)
+test_dataset = dt.data_normalization(test_dataset)
+#test_dataset, mean, stdev = dt.data_test_standarization_2(train_dataset, eval_dataset, test_dataset)
 
 all_metrics = pd.DataFrame(columns=['model_name', 'MSE', 'RMSE', 'MAE', 'Pearson_correlation'])
 conf_index = 0
@@ -152,12 +133,12 @@ for i in range(len(all_models)):
     print(all_models[i])
     if all_models[i] == 'Models':
         continue
-    if all_models[i] =='GLU_HR':
+    if all_models[i] =='GLU_3_Ohio':
         continue
     '''if all_models[i].find('feat_2') != -1:
         continue'''
     # cargamos todas las variables necesarias
-    conf_path = 'OptimizacionParametros/GLU_HR/' + all_models[i] + '/configuracion.txt'
+    conf_path = 'OptimizacionParametros/GLU_3_Ohio/' + all_models[i] + '/configuracion.txt'
     model_params = pd.read_csv(conf_path, delim_whitespace=True)
     t_seq = int(model_params['t_seq'])
     H = int(model_params['H'])
@@ -171,19 +152,11 @@ for i in range(len(all_models)):
     model_file = all_models[i]
     metrics_file = 'metricas_mean_sd_' + all_models[i] + '.xlsx'
 
-    model_path = 'OptimizacionParametros/GLU_HR/' + model_file + '/' + model_file + '.tf'
-    '''
-    if extrapolate == 1:
-        testX, testY = prepare_dataset(t_seq, q, H, test_dataset)
-    else:
-        testX, testY = prepare_extrapolated_dataset(t_seq, q, H, test_dataset)
-    '''
-    testX, testY = main_script.prepare_dataset(t_seq, q, H, test_dataset)
+    model_path = 'OptimizacionParametros/GLU_3_Ohio/' + model_file + '/' + model_file + '.tf'
 
-    # testX, testY = shuffle(testX, testY)
-    num_samples = testY.shape[1]
-    testX = np.reshape(testX, (testX.shape[0] * testX.shape[1], t_seq, testX.shape[3]))
-    testY = np.reshape(testY, (testY.shape[0] * testY.shape[1], H))
+    # prepare, reshape and shuffle the dataset
+    testX, testY = main_script.dataset(t_seq, q, H, test_dataset)
+    num_samples = test_dataset.shape[0]
 
     model = tf_model.TF_LSTM(input_shape=(testX.shape[1], testX.shape[2]), hidden_units=hidden_neurons_1,
                              hidden_units_2=hidden_neurons_2, hidden_units_3=last_hidden_neuron,
@@ -192,15 +165,15 @@ for i in range(len(all_models)):
     model.compile(loss=RMSE,
                   optimizer='adam',
                   metrics=tf.metrics.RootMeanSquaredError())
+    model.summary()
     model.load_weights(model_path)
 
     #model = tf.keras.models.load_model('OptimizacionParametros/tseq_12_q_5_neurons_128_neurons2_0_neurons3_0_lr_0.01/2tseq_12_q_5_neurons_128_neurons2_0_neurons3_0_lr_0.01.tf')
-    model.summary()
     # model = tf_model.TF_LSTM()
     # neurons1, neurons2, neurons3, neurons4, lr, n_layers = model.get_parameters()
 
     # lo entrenamos y testeamos
-    rmse, mse, mae, pearson_correlation, y_hat, y_original = evaluate_results(testX, testY, model, mean, stdev)
+    rmse, mse, mae, pearson_correlation, y_hat, y_original = evaluate_results(testX, testY, model)
 
     # params = tf_model.TF_LSTM()
 
@@ -212,4 +185,4 @@ for i in range(len(all_models)):
     hyper_counter = (y_original > 180).sum()
     print('Hyperglycaemia:{}, Hypoglycaemia:{}'.format(hyper_counter/len(y_original), hypo_counter/len(y_original)))
 
-all_metrics.to_excel(dir_models + '/mejores_metricas_GLU_HR.xlsx', header=True, index=False)
+all_metrics.to_excel(dir_models + '/mejores_metricas_GLU_3_Ohio.xlsx', header=True, index=False)
