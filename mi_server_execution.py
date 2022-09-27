@@ -25,7 +25,7 @@ def train_and_save(trainX, trainY, model, t_seq, q, hidden_neurons_1=0, hidden_n
     tensorboard_checkpoint = tf.keras.callbacks.TensorBoard('GLU_3_Ohio/scalars/{}'.format(model_file), update_freq=1)
     stop_fit_early = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=8)
 
-    history = model.fit(trainX, trainY, validation_split=0.25, shuffle=True, epochs=1000,
+    history = model.fit(trainX, trainY, validation_split=0.25, shuffle=True, epochs=200,
                         batch_size=32, verbose=1, use_multiprocessing=True, workers=5, callbacks=[model_checkpoint,
                                                                                                   tensorboard_checkpoint])
 
