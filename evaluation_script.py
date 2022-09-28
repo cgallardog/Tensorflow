@@ -78,12 +78,12 @@ def plot_results(y_hat, y_original, model_path, test_samples, num_samples):
         os.mkdir(model_path + '/Ficheros')
 
     tiempo_orig = np.array(list(range(0, num_samples)))
-    tiempo_orig = tiempo_orig * 5 / 60
+    tiempo_orig = tiempo_orig
 
     for i in range(len(test_samples)):
         plt.figure('Profile {} '.format(test_samples[i]))
-        plt.plot(tiempo_orig, y_original[i * num_samples:i * num_samples + num_samples], 'bo-', label='original')
-        plt.plot(tiempo_orig, y_hat[i * num_samples:i * num_samples + num_samples], 'rx', label='prediction')
+        plt.plot(y_original[i * num_samples:i * num_samples + num_samples], label='original')
+        plt.plot(y_hat[i * num_samples:i * num_samples + num_samples], 'rx', label='prediction')
         plt.axhline(70, linestyle='--', color='g')
         plt.axhline(180, linestyle='--', color='g')
         # plt.plot(tiempo_hat_2, y_hat, label='prediction_2')
@@ -155,8 +155,11 @@ for i in range(len(all_models)):
     model_path = 'OptimizacionParametros/GLU_3_Ohio/' + model_file + '/' + model_file + '.tf'
 
     # prepare, reshape and shuffle the dataset
-    testX, testY = main_script.dataset(t_seq, q, H, test_dataset)
-    num_samples = test_dataset.shape[0]
+    testX, testY = main_script.prepare_dataset(t_seq, q, H, test_dataset)
+    # Adaptamos los set de datos para que puedan entrar en la LSTM
+    testX = np.reshape(testX, (testX.shape[0] * testX.shape[1], t_seq, testX.shape[3]))
+    testY = np.reshape(testY, (testY.shape[0] * testY.shape[1], H))
+    num_samples = test_dataset.shape[1] - t_seq - q - H
 
     model = tf_model.TF_LSTM(input_shape=(testX.shape[1], testX.shape[2]), hidden_units=hidden_neurons_1,
                              hidden_units_2=hidden_neurons_2, hidden_units_3=last_hidden_neuron,
