@@ -14,7 +14,7 @@ from utils import RMSE
 
 
 def evaluate_results(testX, testY, model, mean=None, stdev=None):
-    evaluation = 400 * model.evaluate(testX, testY)
+    evaluation = model.evaluate(testX, testY)
 
     y_hat = model.predict(testX)
     y_hat = y_hat.flatten()
@@ -38,14 +38,15 @@ def evaluate_results(testX, testY, model, mean=None, stdev=None):
     y_hat_hiper = y_hat_hiper[y_hat_hiper != 0]
     rmse_hiper = mean_squared_error(y_hiper, y_hat_hiper, squared=False)
 
-    hipo = y < 70
+    '''hipo = y < 70
     y_hipo = y * hipo
     y_hat_hipo = y_hat * hipo
     y_hipo = y_hipo[y_hipo != 0]
     y_hat_hipo = y_hat_hipo[y_hat_hipo != 0]
-    rmse_hipo = mean_squared_error(y_hipo, y_hat_hipo, squared=False)
+    rmse_hipo = mean_squared_error(y_hipo, y_hat_hipo, squared=False)'''
 
-    print('RMSE:{}, MAE:{}, RMSE_HIPER:{}, RMSE_HIPO:{}'.format(rmse, mae, rmse_hiper, rmse_hipo))
+    print('RMSE:{}, MAE:{}, RMSE_HIPER:{}, RMSE_EV:{}, MAE_EV:{}'.format(rmse, mae, rmse_hiper,
+                                                                                       evaluation[0]*400, evaluation[2]*400))
 
     return rmse, mse, mae, pearson_correlation, y_hat, y
 
@@ -78,12 +79,12 @@ def plot_results(y_hat, y_original, model_path, test_samples, num_samples):
         os.mkdir(model_path + '/Ficheros')
 
     tiempo_orig = np.array(list(range(0, num_samples)))
-    tiempo_orig = tiempo_orig
+    #tiempo_orig = tiempo_orig
 
     for i in range(len(test_samples)):
         plt.figure('Profile {} '.format(test_samples[i]))
         plt.plot(y_original[i * num_samples:i * num_samples + num_samples], label='original')
-        plt.plot(y_hat[i * num_samples:i * num_samples + num_samples], 'rx', label='prediction')
+        plt.plot(y_hat[i * num_samples:i * num_samples + num_samples], 'r-', label='prediction')
         plt.axhline(70, linestyle='--', color='g')
         plt.axhline(180, linestyle='--', color='g')
         # plt.plot(tiempo_hat_2, y_hat, label='prediction_2')
@@ -167,7 +168,7 @@ for i in range(len(all_models)):
     model = model.build()
     model.compile(loss=RMSE,
                   optimizer='adam',
-                  metrics=tf.metrics.RootMeanSquaredError())
+                  metrics=[tf.metrics.RootMeanSquaredError(), tf.metrics.MeanAbsoluteError()])
     model.summary()
     model.load_weights(model_path)
 

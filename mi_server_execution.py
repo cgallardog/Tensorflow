@@ -23,11 +23,12 @@ def train_and_save(trainX, trainY, model, t_seq, q, hidden_neurons_1=0, hidden_n
 
     model_checkpoint = tf.keras.callbacks.ModelCheckpoint(checkpoint_path, save_best_only=True, save_weights_only=True)
     tensorboard_checkpoint = tf.keras.callbacks.TensorBoard('GLU_3_Ohio/scalars/{}'.format(model_file), update_freq=1)
-    stop_fit_early = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=8)
+    stop_fit_early = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=3)
 
-    history = model.fit(trainX, trainY, validation_split=0.25, shuffle=True, epochs=100,
+    history = model.fit(trainX, trainY, validation_split=0.20, shuffle=True, epochs=100,
                         batch_size=32, verbose=1, use_multiprocessing=True, workers=5, callbacks=[model_checkpoint,
-                                                                                                  tensorboard_checkpoint])
+                                                                                                  tensorboard_checkpoint,
+                                                                                                  stop_fit_early])
 
     if not os.path.exists(model_path):
         os.mkdir(model_path)
@@ -106,6 +107,8 @@ for t_seq in all_t_seq:
                                       metrics=[tf.keras.metrics.RootMeanSquaredError(),
                                                tf.keras.metrics.MeanAbsoluteError()])
                         model.summary()
+                        #print(model.trainable_variables)
+                        print(model.trainable_weights)
 
                         # lo entrenamos y testeamos
                         model_path, history = train_and_save(trainX, trainY, model, t_seq, q, hidden_neurons_1=hidden_units,
@@ -114,12 +117,12 @@ for t_seq in all_t_seq:
 
                         # representamos la pérdida a lo largo del entrenamiento en una gráfica
                         epochs_ran = len(history.history['loss'])
-                        plt.plot(range(0, epochs_ran), history.history['val_root_mean_squared_error'],
+                        plt.plot(range(0, epochs_ran), history.history['val_loss'],
                                  label='Validation')
-                        plt.plot(range(0, epochs_ran), history.history['root_mean_squared_error'], label='Training')
+                        plt.plot(range(0, epochs_ran), history.history['loss'], label='Training')
                         plt.legend()
                         plt.savefig(model_path + 'Loss_Plot', format='eps')
-                        #plt.show()
+                        plt.show()
 
                         '''save_configuration(t_seq, H, q, layer, hidden_units, hidden_units_2, hidden_units_3, lr, 
                                            model_path, configuration)'''
