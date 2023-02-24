@@ -114,7 +114,7 @@ tf.config.experimental.set_memory_growth(device=gpus[0], enable=True)
 data_path = "Dataset/zEvaluation/"
 
 # recogemos todas las muestras, ya divididas
-all_samples, training_samples, eval_samples, test_samples = dataset_samples.get_dataset()
+all_samples, training_samples, eval_samples, test_samples = dataset_samples.get_dataset(year=2020)
 
 # cargamos y dividimos los dataset, juntando todos los datos en un mismo array
 train_dataset, eval_dataset, test_dataset = main_script.create_dataset(training_samples, eval_samples, test_samples,
